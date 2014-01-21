@@ -1,0 +1,41 @@
+Preparing the database
+----------------------
+
+Run aggregate_player_stats.sql to build the player_mv table the first time.
+Run player_stats_triggers.sql to set up the triggers.
+
+player_stats_triggers.sql must be run as a user with appropriate privileges to
+modify the player_mv table
+
+# mysql -u user bf_stats < aggregate_player_stats.sql
+# mysql -u user bf_stats < player_stats_triggers.sql
+
+Both scripts can be run multiple times harmlessly
+
+Once both scripts have been run, all future insertions relevant to the
+player_mv table will automatically update it.
+
+Deploying the web pages
+-----------------------
+
+Running `util/deploy.sh` will attempt to scp all needed files to a configured
+host and directory. These are configured via three variables at the top of the
+file; no other edits should be necessary as long as your ssh_config has been
+set up properly.
+
+Configuring DB Access
+---------------------
+All DB access information is configured in db_functions.php
+
+# cp db_functions.php.changeme db_functions.php
+# vim db_functions.php
+
+After these steps you should be hot to trot
+
+(Optional) Seeding the DB
+-------------------------
+
+A small seed of data is available under the `seed/` directory. With
+# mysql -u user bf_stats < seed/smallseed.sql                            
+you can get a working fixture of data to test with, although the associated
+dates will need to be doctored, or your system clock set back

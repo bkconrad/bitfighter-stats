@@ -1,0 +1,239 @@
+body {
+  background: #AAA;
+  font-size: 10pt;
+}
+
+h2 {border-bottom: 1px solid; font-size: 160%;}
+h3 {text-decoration: underline; font-size: 125%;}
+
+table {
+  border-collapse: collapse;
+  background: #FFF;
+}
+
+a {
+  color: #222;
+  font-family: "Droid Sans" "Arial" sans-serif;
+  padding: 0 .5em 0 0;
+}
+
+table {
+  table-layout: fixed;
+  font-family: "Droid Sans" "Arial" sans-serif;
+  font-size: 8pt;
+  border: 1px solid #888;
+  margin: auto;
+  min-width: 100%;
+}
+
+tr {
+  height: 1.5em;
+}
+
+tr:hover {
+  background: #CCC;
+}
+
+td:last-child {
+  border-right: 0px solid #888;
+}
+
+td {
+  border-right: 1px solid #888;
+  padding: 0 .5em;
+  text-align: right;
+}
+
+td a {
+  color: #222;
+  text-decoration: none;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+.left {
+  text-align: left;
+}
+
+#month-select {
+  background: #FFF;
+  padding: .5em;
+  width: auto;
+  display: block;
+}
+
+#month-select > * {
+  font-family: "Droid Sans" "Arial" sans-serif;
+  padding: .5em .25em;
+}
+
+#month-select > span {
+  background: #666;
+  color: #EEE;
+}
+
+#month-select > a:hover {
+  background: #EEE;
+}
+
+
+/**
+ * stats.php
+ */
+a.auth, .auth {
+  text-decoration: underline;
+  font-weight: bold;
+}
+#month-select {
+  border-left: 1px solid #888;
+  border-right: 1px solid #888;
+  border-top: 1px solid #888;
+}
+#search-form {
+  margin: 0;
+  background: #EEE;
+  border-left: 1px solid #888;
+  border-right: 1px solid #888;
+  border-top: 1px solid #888;
+  padding: .5em;
+}
+#search-form fieldset {
+  display: inline-block;
+}
+#player-count {
+  float: right;
+}
+#player_name {
+  width: 120px;
+  overflow: hidden;
+}
+
+.pager {
+  font-family: monospace;
+  font-size: 8pt;
+  margin: .5em 0;
+}
+.pager a {
+  font-family: monospace;
+  font-size: 8pt;
+  color: #444;
+  padding: 0;
+}
+
+.pager a:hover {
+  color: #888;
+}
+
+/**
+ * player.php
+ */
+#player-search {
+  margin-top: 1em;
+}
+#player-search, #player-search div {
+  font-family: "Droid Sans" "Arial" sans-serif;
+}
+#player-search input {
+  display: inline-block;
+}
+#player-search > div {
+  display: block;
+  width: auto;
+}
+#toggle-authenticated {
+  display: block;
+  width: 100%;
+  height: 1em;
+  font-size: 10pt;
+  font-weight: normal;
+}
+.player #month-select {
+  border: 1px solid #AAA;
+}
+.time-period {
+  float: right;
+}
+.player {
+  width: 640px;
+  margin: auto;
+  background: #F8F8FA;
+  color: #222;
+  padding: .5em;
+  border: 1px solid #888;
+}
+
+.player h1, .player h2 {
+  margin: 0;
+  margin-bottom: .25em;
+}
+
+.player div {
+  display: inline-block;
+  width: 49%;
+  margin: 0;
+  margin-bottom: 1em;
+  vertical-align: top;
+  font-family: monospace;
+  font-size: 10pt;
+}
+
+#frags, #games {
+  float: left;
+}
+
+#flags, #misc {
+  float: right;
+}
+
+#weapons {
+  width: 100%;
+}
+
+#weapons table {
+  width: 100%;
+}
+
+.player th {
+  padding: 0 .5em;
+}
+
+.stat {
+  float: right;
+}
+
+.badge {
+}
+
+/**
+ * shared
+ */
+.table-head td {
+  background: #444;
+  color: #DDD;
+  height: 1.5em;
+  line-height: 1.5em;
+  font-weight: bold;
+  min-width: 3em;
+  text-align: center;
+}
+
+.table-head td a {
+  display: block;
+  padding: .5em 0;
+  color: #DDD;
+}
+
+.table-head td a:hover {
+  color: #FFF;
+}
+
+.table-sections td {
+  text-align: center;
+  background: #CCC;
+}
+
+.even {
+  background: #EEE;
+}
