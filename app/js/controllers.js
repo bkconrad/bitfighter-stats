@@ -46,10 +46,10 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 			$scope.total = data.count;
 			$scope.stats = data;
 
-			// for(i in data) {
-			// 	row = data[i];
-			// 	row.games_total = row.
-			// }
+			for(i in data) {
+				row = data[i];
+				row.last_played = moment(row.last_played + " GMT+0100").fromNow();
+			}
 
 			console.log(data);
 		}).
