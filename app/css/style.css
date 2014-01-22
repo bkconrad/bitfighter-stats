@@ -209,6 +209,14 @@ a.auth, .auth {
 /**
  * shared
  */
+.loading {
+  content: "Loading...";
+}
+
+.stats {
+  height: 400px;
+}
+
 .table-head td {
   background: #444;
   color: #DDD;

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" ng-app="bfstats">
+<head>
+  <meta charset="utf-8">
+  <title>My HTML File</title>
+  <script src="lib/angular.min.js"></script>
+  <script src="app/js/controllers.js"></script>
+  <script src="lib/ng-grid/lib/jquery-1.9.1.js"></script>
+  <script src="lib/ng-grid/lib/jquery-ui-1.9.1.custom.min.js"></script>
+  <script src="lib/ng-grid/lib/jquery.layout-latest.min.js"></script>
+  <script src="lib/ng-grid/ng-grid-2.0.7.debug.js"></script>
+  <link rel="stylesheet" type="text/css" href="lib/ng-grid/ng-grid.css" /> 
+  <link rel="stylesheet" type="text/css" href="app/css/style.css" /> 
+</head>
+<body ng-controller="StatsCtrl">
+	<div>
+		<div class="stats" ng-if="stats" ng-grid="options"></div>
+		<div class="stats" ng-if="!stats" ng-style="loadingStyle">
+			<noscript>
+				A modern, JavaScript-enabled browser is required to use this page.
+			</noscript>
+		</div>
+	</div>
+</body>
+</html>

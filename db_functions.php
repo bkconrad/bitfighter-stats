@@ -11,8 +11,7 @@ function connect_to_db() {
         global $server;
         global $database;
 
-        $connection  = mysql_pconnect($server, $username, $password) or die("Could not connect: \n" . mysql_error());
-        mysql_select_db($database, $connection) or die("Cannot select db $dbname: \n" . mysql_error());
+        $connection = mysqli_connect($server, $username, $password, $database) or die("Could not connect: \n" . mysqli_error());
         return $connection;
 }
 
@@ -23,7 +22,7 @@ function sanitize($data) {
 	}
 	
 	// a mysql connection is required before using this function
-	$data = mysql_real_escape_string($data);
+	$data = mysqli_real_escape_string($data);
 	
 	return $data;
 }

@@ -102,7 +102,7 @@ function make_pager () {
   print("</div>");
 }
 
-connect_to_db();
+$mysqli = connect_to_db();
 get_params(array(
   'player'  => '',
   'alltime' => '',
@@ -260,166 +260,28 @@ if ($alltime == 'yes') {
   ";
 }
 
-// check last modification time against cache headers
-$result = mysql_query($last_modified_query);
-$result or die(mysql_error());
-$row = mysql_fetch_assoc($result);
-$last_modified = strtotime($row['last_update']);
-handle_cache_headers($last_modified);
+// // check last modification time against cache headers
+// $result = mysqli_query($last_modified_query);
+// $result or die(mysqli_error());
+// $row = mysqli_fetch_assoc($result);
+// $last_modified = strtotime($row['last_update']);
+// handle_cache_headers($last_modified);
 
 // count number of results
-$result = mysql_query($count_query);
-$result or die(mysql_error());
-$row = mysql_fetch_assoc($result);
+$result = mysqli_query($mysqli, $count_query);
+$result or die(mysqli_error($mysqli));
+$row = mysqli_fetch_assoc($result);
 $count = $row['count'];
 $pages = ceil($count / $per_page);
 
 // run the actual player data query
-$result = mysql_query($stats_query);
-$result or die(mysql_error());
-$playerdata = mysql_fetch_assoc($result);
+$result = mysqli_query($mysqli, $stats_query);
+$result or die(mysqli_error($mysqli));
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>Bitfighter Player Stats</title>
-<link rel='stylesheet' href='player_stats.css'></link>
-<script type='text/javascript' src='assets/stats.js'>
-</script>
-</head>
-<body>
+$all = array();
 
-<?php
-make_pager();
-?>
-
-<form id='search-form' action="stats.php" method="get">
-  <div>
-    <div id="player-count"><?php print $count ?> result<?php print ($count != 1 ? 's' : '') ?> found</div>
-    <label>Player name contains: </label><input type="text" name="player" value="<?php print $player; ?>"></input>
-    <input type="submit" value="Search"></input>
-    <div id="advanced-search">
-    <fieldset>
-    <legend>Authentication</legend>
-    <input type="radio" name="authed" value="yes" <?php print $authed=='yes' ? 'checked' : '' ?>>Authenticated players</input><br/>
-    <input type="radio" name="authed" value="no" <?php print $authed=='no' ? 'checked' : '' ?>>Unauthenticated players</input><br/>
-    <input type="radio" name="authed" value="" <?php print ($authed == '') ? 'checked' : '' ?>>Both</input>
-    </fieldset>
-    <input type="hidden" name="alltime" value="<?php print $alltime ?>"></input>
-    <input type="hidden" name="year" value="<?php print $year ?>"></input>
-    <input type="hidden" name="month" value="<?php print $month ?>"></input>
-    </div>
-  </div>
-</form>
-<div id="month-select">
-<?php
-
-// convert to months since 0 AD to iterate through them
-// interval of one month
-$current = new DateTime();
-$current->sub(new DateInterval('P5M'));
-$one_month = new DateInterval('P1M');
-$link_month = date('n');
-$link_year = date('Y');
-make_link("All Time", array("alltime" => 'yes', 'page' => '1'));
-for ($i = 5; $i >= 0; $i--) {
-  $link_month = $current->format('n');
-  $link_year = $current->format('Y');
-  $link_month_name = $current->format('F');
-
-  if ($link_month == $month && $link_year == $year && $alltime != 'yes') {
-    print '<span>' . $link_month_name . ' ' . $link_year . ' </span>';
-  } else {
-    make_link($link_month_name . " " . $link_year . " ", array("month" => $link_month, "year" => $link_year, "alltime" => 'no', 'page' => '1'));
-  }
-  $current->add($one_month);
+while($row = mysqli_fetch_assoc($result)) {
+  array_push($all, $row);
 }
 
-?>
-</div>
-<?php
-if (mysql_num_rows($result) > 0):
-?>
-<table>
-  <tr class='table-sections'>
-  <td colspan='6'>General</td>
-  <td colspan='5'>Games</td>
-  <td colspan='4'>Flags</td>
-  <td colspan='4'>Misc</td>
-  </tr>
-  <tr class="table-head"><td>#</td>
-<?php
-  // Make header
-  $sortchar = ($sort == 'DESC' ? '&#9660;' : '&#9650;');
-  $header_class = '';
-  foreach($displayed_fields as $key => $value) {
-    $active = $key == $order;
-    if ($active) {
-      $link_sort = $sort == 'DESC' ? 'ASC' : 'DESC';
-      $header_class = 'active';
-    } else {
-      $link_sort = 'DESC';
-    }
-    print "<td id=\"$key\" class=\"$header_class\">";
-    make_link($value . ($active ? $sortchar : '') , array("order" => $key, "page" => 1, "sort" => $link_sort));
-    print "</td>\n";
-  }
-  print "</tr>";
-
-  // Fill table body
-  $i = $start + 1;
-  $parity = true;
-  while ($playerdata) {
-    foreach ($playerdata as $k => $v) {
-      $playerdata[$k] = htmlspecialchars($v);
-    }
-
-    // Row parity
-    print "<tr class=\"" . ($parity ? 'odd' : 'even') . "\">\n";
-    $parity = !$parity;
-
-    // Rank column
-    print "\t<td>$i</td>\n";
-    $i += 1;
-
-    // Iterate through fields to be displayed and find the values in the current row
-    foreach(array_keys($displayed_fields) as $field) {
-      // Left-align player names
-      $cell_class = ($field == 'player_name' ? 'left' : '');
-      $cell_class = ($field == 'last_played' ? 'last-seen' : $cell_class);
-
-      print "\t<td class='$cell_class'>";
-
-      if ($field == 'kill_death_ratio') {
-        // KDR to two decimal places
-        printf("%.2f",$playerdata[$field]);
-
-      } else if ($field == 'player_name') {
-        // Make link to detailed player stats
-        $link_player_name = urlencode(html_entity_decode($playerdata['player_name']));
-        $link_class = $playerdata['is_authenticated'] ? 'auth' : '';
-        print "<a class='$link_class' href=\"player.php?player=$link_player_name&alltime=$alltime&year=$year&month=$month\">" . str_replace(" ", "&nbsp;", $playerdata[$field]) . "</a>";
-
-      } else {
-        // Otherwise, just print
-        print $playerdata[$field];
-      }
-      print "</td>\n";
-    }
-    print "</tr>\n";
-    $playerdata = mysql_fetch_assoc($result);
-  }
-  print "</table>";
-
-else:
-  print "<p>No results to display</p>";
-
-endif;
-
-make_pager();
-printf("<!--Generated in %ss at %s -->", round(microtime(true) - $start_time, 6), date('H:i:s'));
-?>
-</body>
-</html>
+echo json_encode($all);
