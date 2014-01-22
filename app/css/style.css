@@ -1,60 +1,5 @@
 body {
   background: #AAA;
-  font-size: 10pt;
-}
-
-h2 {border-bottom: 1px solid; font-size: 160%;}
-h3 {text-decoration: underline; font-size: 125%;}
-
-table {
-  border-collapse: collapse;
-  background: #FFF;
-}
-
-a {
-  color: #222;
-  font-family: "Droid Sans" "Arial" sans-serif;
-  padding: 0 .5em 0 0;
-}
-
-table {
-  table-layout: fixed;
-  font-family: "Droid Sans" "Arial" sans-serif;
-  font-size: 8pt;
-  border: 1px solid #888;
-  margin: auto;
-  min-width: 100%;
-}
-
-tr {
-  height: 1.5em;
-}
-
-tr:hover {
-  background: #CCC;
-}
-
-td:last-child {
-  border-right: 0px solid #888;
-}
-
-td {
-  border-right: 1px solid #888;
-  padding: 0 .5em;
-  text-align: right;
-}
-
-td a {
-  color: #222;
-  text-decoration: none;
-}
-
-td a:hover {
-  text-decoration: underline;
-}
-
-.left {
-  text-align: left;
 }
 
 #month-select {
@@ -108,22 +53,6 @@ a.auth, .auth {
 #player_name {
   width: 120px;
   overflow: hidden;
-}
-
-.pager {
-  font-family: monospace;
-  font-size: 8pt;
-  margin: .5em 0;
-}
-.pager a {
-  font-family: monospace;
-  font-size: 8pt;
-  color: #444;
-  padding: 0;
-}
-
-.pager a:hover {
-  color: #888;
 }
 
 /**
@@ -217,31 +146,6 @@ a.auth, .auth {
   height: 400px;
 }
 
-.table-head td {
-  background: #444;
-  color: #DDD;
-  height: 1.5em;
-  line-height: 1.5em;
-  font-weight: bold;
-  min-width: 3em;
-  text-align: center;
-}
-
-.table-head td a {
-  display: block;
-  padding: .5em 0;
-  color: #DDD;
-}
-
-.table-head td a:hover {
-  color: #FFF;
-}
-
-.table-sections td {
-  text-align: center;
-  background: #CCC;
-}
-
-.even {
-  background: #EEE;
+.ngVerticalBar {
+  height: 100%;
 }

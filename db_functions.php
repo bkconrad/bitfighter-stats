@@ -15,15 +15,15 @@ function connect_to_db() {
         return $connection;
 }
 
-function sanitize($data) {
+function sanitize($mysqli, $str) {
 	// apply stripslashes if magic_quotes_gpc is enabled
 	if(get_magic_quotes_gpc()) {
-		$data = stripslashes($data);
+		$str = stripslashes($str);
 	}
 	
 	// a mysql connection is required before using this function
-	$data = mysqli_real_escape_string($data);
+	$str = mysqli_real_escape_string($mysqli, $str);
 	
-	return $data;
+	return $str;
 }
 ?>

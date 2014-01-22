@@ -4,12 +4,7 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 
 	$scope.loadingStyle = 'loading';
 
-	$http.get('stats.php').success(function(data) {
-		$scope.stats = data;
-	});
-
-	$scope.options = {
-		enablePaging: true,
+	$scope.options = $scope.options || {
 		enableColumnResize: true,
 		showFooter: true,
 		showHeader: true,
@@ -17,12 +12,28 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 			// pageSizes: list of available page sizes.
 			pageSizes: [5, 10, 40], 
 			//pageSize: currently selected page size. 
-			pageSize: 5,
-			//totalServerItems: Total items are on the server. 
-			totalServerItems: 99,
+			pageSize: 40,
 			//currentPage: the uhm... current page.
 			currentPage: 1
 		},	
+		enablePaging: true,
+		totalServerItems: 'total',
 		data: 'stats'
 	};
+
+	function getData(page, per_page) {
+		$http.get('stats.php', { params: { page: page, per_page: per_page }}).success(function(data) {
+			$scope.total = data.count;
+			$scope.stats = data;
+		}).
+		error(function(data, status, headers, config) {
+			console.log(status);
+		});
+	}
+
+	$scope.$watchCollection('options.pagingOptions', function() {
+		getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
+	})
+
+	getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
 });
