@@ -16,7 +16,7 @@
   <link rel="stylesheet" type="text/css" href="app/css/style.css" /> 
 </head>
 <body ng-controller="StatsCtrl">
-	<select ng-model="selected" ng-options="month.pretty for month in months">
+	<select ng-model="selectedPeriod" ng-options="period.pretty for period in periods">
 	</select>
 	<div ng-if="player" ng-controller="PlayerCtrl">
 		{{player}}

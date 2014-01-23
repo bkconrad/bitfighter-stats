@@ -20,7 +20,14 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		showFooter: true,
 		showHeader: true,
 		afterSelectionChange: function(row, event) {
-			$http.get('player.php', {params: {player: row.entity.player_name, authed: row.entity.is_authenticated == '1' ? 'yes' : 'no'}})
+			var params = {
+				month: $scope.selectedPeriod.month + 1,
+				year: $scope.selectedPeriod.year,
+				player: row.entity.player_name,
+				authed: row.entity.is_authenticated == '1' ? 'yes' : 'no'
+			};
+
+			$http.get('player.php', {params: params})
 			.success(function(data) {
 				var i;
 				var achievement;
@@ -79,7 +86,14 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 	function getData(page, per_page) {
 		var i;
 		var row;
-		$http.get('stats.php', { params: { page: page, per_page: per_page }}).success(function(data) {
+		var params = {
+			month: $scope.selectedPeriod.month + 1,
+			year: $scope.selectedPeriod.year,
+			page: page,
+			per_page: per_page
+		};
+
+		$http.get('stats.php', { params: params}).success(function(data) {
 			$scope.total = data.count;
 			$scope.stats = data;
 
@@ -94,23 +108,23 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		});
 	}
 
-	$scope.months = [];
+	$scope.periods = [];
 	var i;
 	var t;
 	var data;
 	for(i = 5; i >= 0; i--) {
-		t = moment().subtract('months', i);
+		t = moment().subtract('month', i);
 		data = {
 			pretty: t.format('MMMM YYYY'),
 			month: t.month(),
 			year: t.year()
 		};
-		$scope.months.push(data);
+		$scope.periods.push(data);
 	}
-	$scope.selected = $scope.months[5];
+	$scope.selectedPeriod = $scope.periods[5];
 
-	$scope.$watch('selected', function() {
-		console.log($scope.selected);
+	$scope.$watch('selectedPeriod', function() {
+		console.log($scope.selectedPeriod);
 	});
 
 	$scope.$watchCollection('options.pagingOptions', function() {
