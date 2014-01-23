@@ -52,14 +52,7 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 				$scope.player = data;
 			});
 		},
-		pagingOptions: {
-			pageSizes: [5, 10, 40], 
-			pageSize: 40,
-			currentPage: 1
-		},	
-		enablePaging: true,
 		multiSelect: false,
-		totalServerItems: 'total',
 		columnDefs: [
 			{field: 'player_name', displayName: 'Player Name', width: '100'},
 			{field: 'kill_death_ratio', displayName: 'KDR'},
@@ -83,14 +76,12 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		data: 'stats'
 	};
 
-	function getAllStats(page, per_page) {
+	function getAllStats() {
 		var i;
 		var row;
 		var params = {
 			month: $scope.selectedPeriod.month + 1,
-			year: $scope.selectedPeriod.year,
-			page: page,
-			per_page: per_page
+			year: $scope.selectedPeriod.year
 		};
 
 		$http.get('stats.php', { params: params}).success(function(data) {
@@ -123,15 +114,11 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 	}
 	$scope.selectedPeriod = $scope.periods[5];
 
-	$scope.$watch('selectedPeriod', function() {
-		getAllStats($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
-	});
+	$scope.$watch('selectedPeriod', getAllStats);
 
-	$scope.$watchCollection('options.pagingOptions', function() {
-		getAllStats($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
-	})
+	$scope.$watchCollection('options.pagingOptions', getAllStats);
 
-	getAllStats($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
+	getAllStats();
 });
 
 phonecatApp.controller('PlayerCtrl', function ($scope, $http) {

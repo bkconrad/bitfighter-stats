@@ -6,32 +6,15 @@ require "lib.php";
 
 $mysqli = connect_to_db();
 get_params($mysqli, array(
-  'player'   => '',
   'alltime'  => '',
-  'authed'   => '',
-  'order'    => 'kill_death_ratio',
-  'sort'     => 'DESC',
-  'page'     => '1',
-  'per_page' => '40',
   'year'     => date('Y'),
   'month'    => date('m')
 ));
-
-$per_page = intval($per_page);
-
-$page = max($page, 1);
-$start = ($page - 1) * $per_page;
 
 // build filter
 $filters = array();
 if ($alltime != 'yes') {
   $filters[] = "time_period='$year-$month-01'";
-}
-if ($player != '') {
-  $filters[] = "player_name LIKE '%" . html_entity_decode($player) . "%'";
-}
-if ($authed != '') {
-  $filters[] = "is_authenticated=" . ($authed == 'yes' ? '1' : '0');
 }
 if (!empty($filters)) {
   $filter = "WHERE " . implode(" AND ", $filters);
@@ -63,10 +46,6 @@ if ($alltime == 'yes') {
     FROM player_mv
     $filter
     GROUP BY player_name, is_authenticated
-    ORDER BY
-      $order
-      $sort
-    LIMIT $start,$per_page
     ;
   ";
 
@@ -107,10 +86,6 @@ if ($alltime == 'yes') {
       , is_authenticated
     FROM player_mv
     $filter
-    ORDER BY
-      $order
-      $sort
-    LIMIT $start,$per_page
     ;
   ";
 
