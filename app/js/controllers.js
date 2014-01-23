@@ -27,8 +27,16 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 
 				console.log(data);
 
-				data.game_count = parseInt(data.win_count, 10) + parseInt(data.lose_count, 10) + parseInt(data.tie_count, 10) + parseInt(data.dnf_count, 10);
-				data.finished_game_count = parseInt(data.win_count, 10) + parseInt(data.lose_count, 10) + parseInt(data.tie_count, 10);
+				// convert integer strings to actual integers
+				for(i in data) {
+					if(parseInt(data[i], 10).toString() === data[i]) {
+						data[i] = parseInt(data[i], 10);
+					}
+				}
+
+				data.game_count = data.win_count + data.lose_count + data.tie_count + data.dnf_count;
+				data.finished_game_count = data.win_count + data.lose_count + data.tie_count;
+
 				for(i in data.achievements) {
 					achievement = data.achievements[i];
 					achievement.hint = BADGE_MAP[achievement.achievement_id][0];
