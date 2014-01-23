@@ -15,7 +15,7 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 
 	$scope.loadingStyle = 'loading';
 
-	$scope.options = $scope.options || {
+	$scope.options = {
 		enableColumnResize: true,
 		showFooter: true,
 		showHeader: true,
