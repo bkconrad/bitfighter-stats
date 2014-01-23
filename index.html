@@ -16,6 +16,9 @@
   <link rel="stylesheet" type="text/css" href="app/css/style.css" /> 
 </head>
 <body ng-controller="StatsCtrl">
+	<div ng-if="player" ng-controller="PlayerCtrl">
+		{{player}}
+	</div>
 	<div>
 		<div class="stats" ng-if="stats" ng-grid="options"></div>
 		<div class="stats" ng-if="!stats" ng-style="loadingStyle">

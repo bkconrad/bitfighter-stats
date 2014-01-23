@@ -8,6 +8,12 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		enableColumnResize: true,
 		showFooter: true,
 		showHeader: true,
+		afterSelectionChange: function(row, event) {
+			$http.get('player.php', {params: {player: row.entity.player_name, authed: row.entity.is_authenticated == '1' ? 'yes' : 'no'}})
+			.success(function(data) {
+				$scope.player = data;
+			});
+		},
 		pagingOptions: {
 			pageSizes: [5, 10, 40], 
 			pageSize: 40,
@@ -63,4 +69,7 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 	})
 
 	getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
+});
+
+phonecatApp.controller('PlayerCtrl', function ($scope, $http) {
 });
