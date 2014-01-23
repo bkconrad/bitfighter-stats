@@ -21,7 +21,10 @@
 	<div ng-if="player" ng-controller="PlayerCtrl">
 		{{player}}
 		<h1 class="auth"> {{player.player_name}} </h1>
-		<span class="badge" ng-if="player.achievements" ng-repeat="achievement in player.achievements"><img title="{{achievement.hint}}" src="badges/{{achievement.image}}"></img></span>
+
+		<div id="badges">
+			<span class="badge" ng-if="player.achievements" ng-repeat="achievement in player.achievements"><img title="{{achievement.hint}}" src="badges/{{achievement.image}}"></img></span>
+		</div>
 
 		<div id="frags">
 			<h2>Frags</h2>
