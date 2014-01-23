@@ -1,4 +1,15 @@
 var phonecatApp = angular.module('bfstats', ['ngGrid']);
+
+var BADGE_MAP = {
+  0: ["Developer", "developer.png"], 
+  2: ["Twenty five flags", "twenty_five_flags.png"], 
+  3: ["BBB Gold Medalist", "bbb_gold.png"], 
+  4: ["BBB Silver Medalist", "bbb_silver.png"], 
+  5: ["BBB Bronze Medalist", "bbb_bronze.png"], 
+  6: ["BBB Participant", "bbb_participation.png"], 
+  7: ["Level Design Contest Winner", "level_design_winner.png"], 
+  8: ["Zone Controller", "zone_controller.png"]
+};
  
 phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 
@@ -11,8 +22,18 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		afterSelectionChange: function(row, event) {
 			$http.get('player.php', {params: {player: row.entity.player_name, authed: row.entity.is_authenticated == '1' ? 'yes' : 'no'}})
 			.success(function(data) {
+				var i;
+				var achievement;
+
+				console.log(data);
+
 				data.game_count = parseInt(data.win_count, 10) + parseInt(data.lose_count, 10) + parseInt(data.tie_count, 10) + parseInt(data.dnf_count, 10);
 				data.finished_game_count = parseInt(data.win_count, 10) + parseInt(data.lose_count, 10) + parseInt(data.tie_count, 10);
+				for(i in data.achievements) {
+					achievement = data.achievements[i];
+					achievement.hint = BADGE_MAP[achievement.achievement_id][0];
+					achievement.image = BADGE_MAP[achievement.achievement_id][1];
+				}
 				$scope.player = data;
 			});
 		},
@@ -59,7 +80,6 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 				row.last_played = moment(row.last_played + " GMT+0100").fromNow();
 			}
 
-			console.log(data);
 		}).
 		error(function(data, status, headers, config) {
 			console.log(status);

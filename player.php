@@ -1,16 +1,4 @@
 <?php
-date_default_timezone_set('America/Los_Angeles');
-
-$BADGE_MAP = array(
-  0 => array("Developer", "developer.png"), 
-  2 => array("Twenty five flags", "twenty_five_flags.png"), 
-  3 => array("BBB Gold Medalist", "bbb_gold.png"), 
-  4 => array("BBB Silver Medalist", "bbb_silver.png"), 
-  5 => array("BBB Bronze Medalist", "bbb_bronze.png"), 
-  6 => array("BBB Participant", "bbb_participation.png"), 
-  7 => array("Level Design Contest Winner", "level_design_winner.png"), 
-  8 => array("Zone Controller", "zone_controller.png")
-);
 
 require "db_functions.php";
 require "lib.php";
@@ -156,6 +144,7 @@ $result or die(mysqli_error($mysqli));
 $data = mysqli_fetch_assoc($result);
 
 // get achievement data
+$achievements = array();
 if($data['is_authenticated']) {
   $achievement_query = "
     SELECT player_name, achievement_id
@@ -164,6 +153,10 @@ if($data['is_authenticated']) {
   ";
   $achievement_result = mysqli_query($mysqli, $achievement_query);
   $achievement_result or die(mysqli_error($mysqli));
+
+  while($row = mysqli_fetch_assoc($achievement_result)) {
+    $achievements[] = $row;
+  }
 }
 
 // $last_modified = strtotime($data['last_update']);
@@ -181,5 +174,7 @@ $weapons = array(
 if(!$data) {
   http_response_code(404);
 }
+
+$data['achievements'] = $achievements;
 
 echo json_encode($data);

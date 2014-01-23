@@ -17,10 +17,9 @@
 </head>
 <body ng-controller="StatsCtrl">
 	<div ng-if="player" ng-controller="PlayerCtrl">
+		{{player}}
 		<h1 class="auth"> {{player.name}} </h1>
-		<span class="badge"><img title="Twenty five flags" src="badges/twenty_five_flags.png"></img></span>
-		<span class="badge"><img title="Level Design Contest Winner" src="badges/level_design_winner.png"></img></span>
-		<span class="badge"><img title="BBB Participant" src="badges/bbb_participation.png"></img></span>
+		<span class="badge" ng-if="player.achievements" ng-repeat="achievement in player.achievements"><img title="{{achievement.hint}}" src="badges/{{achievement.image}}"></img></span>
 
 		<div id="frags">
 			<h2>Frags</h2>
