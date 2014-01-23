@@ -83,7 +83,7 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		data: 'stats'
 	};
 
-	function getData(page, per_page) {
+	function getAllStats(page, per_page) {
 		var i;
 		var row;
 		var params = {
@@ -124,14 +124,14 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 	$scope.selectedPeriod = $scope.periods[5];
 
 	$scope.$watch('selectedPeriod', function() {
-		getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
+		getAllStats($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
 	});
 
 	$scope.$watchCollection('options.pagingOptions', function() {
-		getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
+		getAllStats($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
 	})
 
-	getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
+	getAllStats($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
 });
 
 phonecatApp.controller('PlayerCtrl', function ($scope, $http) {
