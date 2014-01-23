@@ -84,7 +84,8 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 			year: $scope.selectedPeriod.year
 		};
 
-		$http.get('stats.php', { params: params}).success(function(data) {
+		$http.get('stats.php', { params: params})
+		.success(function(data) {
 			$scope.total = data.count;
 			$scope.stats = data;
 
@@ -92,9 +93,8 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 				row = data[i];
 				row.last_played = moment(row.last_played + " GMT+0100").fromNow();
 			}
-
-		}).
-		error(function(data, status, headers, config) {
+		})
+		.error(function(data, status, headers, config) {
 			console.log(status);
 		});
 	}
