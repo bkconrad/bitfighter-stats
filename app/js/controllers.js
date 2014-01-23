@@ -103,3 +103,10 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 
 phonecatApp.controller('PlayerCtrl', function ($scope, $http) {
 });
+
+phonecatApp.filter('percentage', function() {
+	return function(input) {
+		var val = parseFloat(input) || 0;
+		return (Math.round(val * 10000) / 100).toFixed(2) + '%';
+	};
+});

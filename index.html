@@ -23,54 +23,54 @@
 
 		<div id="frags">
 			<h2>Frags</h2>
-			Kills:       {{player.kill_count}}<br/>
-			Deaths:      {{player.death_count}} <br/>
-			Suicides:    {{player.suicide_count}}<br/>
-			KDR:         {{player.kill_death_ratio}}<br/>
-			Spread:      {{player.kill_count - player.death_count}}<br/>
-			Spread/game: {{(player.kill_count - player.death_count) / player.game_count | number:2}}<br/>
+			Kills:      <span class="stat">{{player.kill_count}}</span><br/>
+			Deaths:     <span class="stat">{{player.death_count}}</span><br/>
+			Suicides:   <span class="stat">{{player.suicide_count}}</span><br/>
+			KDR:        <span class="stat">{{player.kill_death_ratio | number:2}}</span><br/>
+			Spread:     <span class="stat">{{player.kill_count - player.death_count}}</span><br/>
+			Spread/game:<span class="stat">{{(player.kill_count - player.death_count) / player.game_count | number:2}}</span><br/>
 		</div>
 		<div id="flags">
 			<h2>Flags</h2>
-			Taken:       {{player.flag_pickups}}<br/>
-			Dropped:     {{player.flag_drops}}<br/>
-			Returned:    {{player.flag_returns}}<br/>
-			Scored:      {{player.flag_scores}}<br/>
-			Scored/game: {{player.flag_scores / player.game_count | number:2}}<br/>
+			Taken:      <span class="stat">{{player.flag_pickups}}</span><br/>
+			Dropped:    <span class="stat">{{player.flag_drops}}</span><br/>
+			Returned:   <span class="stat">{{player.flag_returns}}</span><br/>
+			Scored:     <span class="stat">{{player.flag_scores}}</span><br/>
+			Scored/game:<span class="stat">{{player.flag_scores / player.game_count | number:2}}</span><br/>
 		</div>
 		<div id="games">
 			<h2>Games</h2>
-			Played:      {{player.game_count}}<br/>
-			Wins:        {{player.win_count}}({{player.win_count / player.game_count}})<br/>
-			Losses:      {{player.lose_count}}({{player.lose_count / player.game_count}})<br/>
-			Ties:        {{player.tie_count}}({{player.tie_count / player.game_count}})<br/>
-			Points:      {{player.points}}<br/>
-			Points/game: {{player.points / player.game_count | number:2}}<br/>
+			Played:     <span class="stat">{{player.game_count}}</span><br/>
+			Wins:       <span class="stat">{{player.win_count}}({{player.win_count / player.game_count | percentage}})</span><br/>
+			Losses:     <span class="stat">{{player.lose_count}}({{player.lose_count / player.game_count | percentage}})</span><br/>
+			Ties:       <span class="stat">{{player.tie_count}}({{player.tie_count / player.game_count | percentage}})</span><br/>
+			Points:     <span class="stat">{{player.points}}</span><br/>
+			Points/game:<span class="stat">{{player.points / player.game_count | number:2}}</span><br/>
 			</div>
 		<div id="misc">
 			<h2>Misc</h2>
-			Asteroids Destroyed:     {{player.asteroid_kills}}<br/>
-			Asteroid Crashes:        {{player.asteroid_crashes}}<br/>
-			Force Fields Destroyed:  {{player.ff_kills}}<br/>
-			Force Fields Engineered: {{player.ffs_engineered}}<br/>
-			Turrets Destroyed:       {{player.turret_kills}}<br/>
-			Turrets Engineered:      {{player.turrets_engineered}}<br/>
-			Teleporters Engineered:  {{player.teleports_engineered}}<br/>
-			Distance Traveled:       {{player.distance_traveled}}<br/>
-			Teleportations:          {{player.teleport_uses}}<br/>
-			Team Switches:           {{player.switched_team_count}}<br/>
-			Last Seen:               {{player.last_update}}<br/>
+			Asteroids Destroyed:    <span class="stat">{{player.asteroid_kills}}</span><br/>
+			Asteroid Crashes:       <span class="stat">{{player.asteroid_crashes}}</span><br/>
+			Force Fields Destroyed: <span class="stat">{{player.ff_kills}}</span><br/>
+			Force Fields Engineered:<span class="stat">{{player.ffs_engineered}}</span><br/>
+			Turrets Destroyed:      <span class="stat">{{player.turret_kills}}</span><br/>
+			Turrets Engineered:     <span class="stat">{{player.turrets_engineered}}</span><br/>
+			Teleporters Engineered: <span class="stat">{{player.teleports_engineered}}</span><br/>
+			Distance Traveled:      <span class="stat">{{player.distance_traveled}}</span><br/>
+			Teleportations:         <span class="stat">{{player.teleport_uses}}</span><br/>
+			Team Switches:          <span class="stat">{{player.switched_team_count}}</span><br/>
+			Last Seen:              <span class="stat">{{player.last_update}}</span><br/>
 			</div>
 		<div id="weapons">
 			<h2>Weapons</h2>
 			<table>
 				<thead><tr><td>Weapon</td><td>Fired</td><td>Hit</td><td>Accuracy</td></tr></thead>
-				<tr><td>Phaser</td><td>{{player.phaser_shots}}</td><td>{{player.phaser_shots_struck}}</td><td>{{player.phaser_shots / (player.phaser_shots + player.phaser_shots_struck)}}</td></tr>
-				<tr><td>Bouncer</td><td>{{player.bouncer_shots}}</td><td>{{player.bouncer_shots_struck}}</td><td>{{player.bouncer_shots / (player.bouncer_shots + player.bouncer_shots_struck)}}</td></tr>
-				<tr><td>Triple</td><td>{{player.triple_shots}}</td><td>{{player.triple_shots_struck}}</td><td>{{player.triple_shots / (player.triple_shots + player.triple_shots_struck)}}</td></tr>
-				<tr><td>Burst</td><td>{{player.burst_shots}}</td><td>{{player.burst_shots_struck}}</td><td>{{player.burst_shots / (player.burst_shots + player.burst_shots_struck)}}</td></tr>
-				<tr><td>Mine</td><td>{{player.mine_shots}}</td><td>{{player.mine_shots_struck}}</td><td>{{player.mine_shots / (player.mine_shots + player.mine_shots_struck)}}</td></tr>
-				<tr><td>Spybug</td><td>{{player.spybug_shots}}</td><td>{{player.spybug_shots_struck}}</td><td>{{player.spybug_shots / (player.spybug_shots + player.spybug_shots_struck)}}</td></tr>
+				<tr><td>Phaser</td><td>{{player.phaser_shots}}</td><td>{{player.phaser_shots_struck}}</td><td>{{player.phaser_shots / (player.phaser_shots + player.phaser_shots_struck) | percentage}}</td></tr>
+				<tr><td>Bouncer</td><td>{{player.bouncer_shots}}</td><td>{{player.bouncer_shots_struck}}</td><td>{{player.bouncer_shots / (player.bouncer_shots + player.bouncer_shots_struck) | percentage}}</td></tr>
+				<tr><td>Triple</td><td>{{player.triple_shots}}</td><td>{{player.triple_shots_struck}}</td><td>{{player.triple_shots / (player.triple_shots + player.triple_shots_struck) | percentage}}</td></tr>
+				<tr><td>Burst</td><td>{{player.burst_shots}}</td><td>{{player.burst_shots_struck}}</td><td>{{player.burst_shots / (player.burst_shots + player.burst_shots_struck) | percentage}}</td></tr>
+				<tr><td>Mine</td><td>{{player.mine_shots}}</td><td>{{player.mine_shots_struck}}</td><td>{{player.mine_shots / (player.mine_shots + player.mine_shots_struck) | percentage}}</td></tr>
+				<tr><td>Spybug</td><td>{{player.spybug_shots}}</td><td>{{player.spybug_shots_struck}}</td><td>{{player.spybug_shots / (player.spybug_shots + player.spybug_shots_struck) | percentage}}</td></tr>
 			</table>
 		</div>
 		<div style="clear: both"></div>
