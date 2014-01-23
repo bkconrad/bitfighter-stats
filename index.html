@@ -83,12 +83,11 @@
 
 	</div>
 	<div>
-		<div class="stats" ng-if="stats" ng-grid="options"></div>
-		<div class="stats" ng-if="!stats" ng-style="loadingStyle">
-			<noscript>
-				A modern, JavaScript-enabled browser is required to use this page.
-			</noscript>
-		</div>
+		<div class="stats" ng-if="stats && stats.count > 0" ng-grid="options"></div>
+		<div class="no-stats" ng-if="stats && stats.count === 0">No stats found for {{selectedPeriod.pretty}}</div>
+		<noscript ng-if="!stats">
+			A modern, JavaScript-enabled browser is required to use this page.
+		</noscript>
 	</div>
 </body>
 </html>
