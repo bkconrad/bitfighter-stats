@@ -16,6 +16,63 @@ var BADGE_MAP = {
  
 bfstats.controller('StatsCtrl', function ($scope, $http) {
 
+	function getAllStats() {
+		var i;
+		var row;
+		var params = {
+			month: $scope.selectedPeriod.month + 1,
+			year: $scope.selectedPeriod.year
+		};
+
+		$http.get('stats.php', { params: params})
+		.success(function(data) {
+			$scope.total = data.count;
+			$scope.stats = data;
+
+			for(i in data) {
+				row = data[i];
+				row.last_played = moment(row.last_played + " GMT+0100").fromNow();
+			}
+		})
+		.error(function(data, status, headers, config) {
+			console.log(status);
+		});
+	}
+
+	function getPlayerStats() {
+		var params = {
+			month: $scope.selectedPeriod.month + 1,
+			year: $scope.selectedPeriod.year,
+			player: $scope.selectedPlayer.player_name,
+			authed: $scope.selectedPlayer.is_authenticated === '1' ? 'yes' : 'no'
+		};
+
+		$http.get('player.php', {params: params})
+		.success(function(data) {
+			var i;
+			var achievement;
+
+			console.log(data);
+
+			// convert integer strings to actual integers
+			for(i in data) {
+				if(parseInt(data[i], 10).toString() === data[i]) {
+					data[i] = parseInt(data[i], 10);
+				}
+			}
+
+			data.game_count = data.win_count + data.lose_count + data.tie_count + data.dnf_count;
+			data.finished_game_count = data.win_count + data.lose_count + data.tie_count;
+
+			for(i in data.achievements) {
+				achievement = data.achievements[i];
+				achievement.hint = BADGE_MAP[achievement.achievement_id][0];
+				achievement.image = BADGE_MAP[achievement.achievement_id][1];
+			}
+			$scope.player = data;
+		});
+	}
+
 	$scope.loadingStyle = 'loading';
 
 	$scope.options = {
@@ -23,37 +80,7 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 		showFooter: true,
 		showHeader: true,
 		afterSelectionChange: function(row, event) {
-			var params = {
-				month: $scope.selectedPeriod.month + 1,
-				year: $scope.selectedPeriod.year,
-				player: row.entity.player_name,
-				authed: row.entity.is_authenticated == '1' ? 'yes' : 'no'
-			};
-
-			$http.get('player.php', {params: params})
-			.success(function(data) {
-				var i;
-				var achievement;
-
-				console.log(data);
-
-				// convert integer strings to actual integers
-				for(i in data) {
-					if(parseInt(data[i], 10).toString() === data[i]) {
-						data[i] = parseInt(data[i], 10);
-					}
-				}
-
-				data.game_count = data.win_count + data.lose_count + data.tie_count + data.dnf_count;
-				data.finished_game_count = data.win_count + data.lose_count + data.tie_count;
-
-				for(i in data.achievements) {
-					achievement = data.achievements[i];
-					achievement.hint = BADGE_MAP[achievement.achievement_id][0];
-					achievement.image = BADGE_MAP[achievement.achievement_id][1];
-				}
-				$scope.player = data;
-			});
+			$scope.selectedPlayer = row.entity;
 		},
 		multiSelect: false,
 		columnDefs: [
@@ -79,29 +106,6 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 		data: 'stats'
 	};
 
-	function getAllStats() {
-		var i;
-		var row;
-		var params = {
-			month: $scope.selectedPeriod.month + 1,
-			year: $scope.selectedPeriod.year
-		};
-
-		$http.get('stats.php', { params: params})
-		.success(function(data) {
-			$scope.total = data.count;
-			$scope.stats = data;
-
-			for(i in data) {
-				row = data[i];
-				row.last_played = moment(row.last_played + " GMT+0100").fromNow();
-			}
-		})
-		.error(function(data, status, headers, config) {
-			console.log(status);
-		});
-	}
-
 	$scope.periods = [];
 	var i;
 	var t;
@@ -118,6 +122,8 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 	$scope.selectedPeriod = $scope.periods[5];
 
 	$scope.$watch('selectedPeriod', getAllStats);
+	$scope.$watch('selectedPeriod', getPlayerStats);
+	$scope.$watch('selectedPlayer', getPlayerStats);
 
 	getAllStats();
 });
