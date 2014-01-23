@@ -94,6 +94,25 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		});
 	}
 
+	$scope.months = [];
+	var i;
+	var t;
+	var data;
+	for(i = 5; i >= 0; i--) {
+		t = moment().subtract('months', i);
+		data = {
+			pretty: t.format('MMMM YYYY'),
+			month: t.month(),
+			year: t.year()
+		};
+		$scope.months.push(data);
+	}
+	$scope.selected = $scope.months[5];
+
+	$scope.$watch('selected', function() {
+		console.log($scope.selected);
+	});
+
 	$scope.$watchCollection('options.pagingOptions', function() {
 		getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
 	})
