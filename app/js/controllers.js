@@ -1,4 +1,4 @@
-var phonecatApp = angular.module('bfstats', ['ngGrid']);
+var bfstats = angular.module('bfstats', ['ngGrid']);
 
 var BADGE_MAP = {
   0: ["Developer", "developer.png"], 
@@ -11,7 +11,7 @@ var BADGE_MAP = {
   8: ["Zone Controller", "zone_controller.png"]
 };
  
-phonecatApp.controller('StatsCtrl', function ($scope, $http) {
+bfstats.controller('StatsCtrl', function ($scope, $http) {
 
 	$scope.loadingStyle = 'loading';
 
@@ -121,10 +121,10 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 	getAllStats();
 });
 
-phonecatApp.controller('PlayerCtrl', function ($scope, $http) {
+bfstats.controller('PlayerCtrl', function ($scope, $http) {
 });
 
-phonecatApp.filter('percentage', function() {
+bfstats.filter('percentage', function() {
 	return function(input) {
 		var val = parseFloat(input) || 0;
 		return (Math.round(val * 10000) / 100).toFixed(2) + '%';
