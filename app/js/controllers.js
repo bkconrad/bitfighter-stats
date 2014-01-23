@@ -116,8 +116,6 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 
 	$scope.$watch('selectedPeriod', getAllStats);
 
-	$scope.$watchCollection('options.pagingOptions', getAllStats);
-
 	getAllStats();
 });
 
