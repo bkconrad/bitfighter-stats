@@ -124,7 +124,7 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 	$scope.selectedPeriod = $scope.periods[5];
 
 	$scope.$watch('selectedPeriod', function() {
-		console.log($scope.selectedPeriod);
+		getData($scope.options.pagingOptions.currentPage, $scope.options.pagingOptions.pageSize);
 	});
 
 	$scope.$watchCollection('options.pagingOptions', function() {
