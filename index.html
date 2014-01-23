@@ -29,7 +29,7 @@
 			Suicides:    {{player.suicide_count}}<br/>
 			KDR:         {{player.kill_death_ratio}}<br/>
 			Spread:      {{player.kill_count - player.death_count}}<br/>
-			Spread/game: {{(player.kill_count - player.death_count) / player.game_count}}<br/>
+			Spread/game: {{(player.kill_count - player.death_count) / player.game_count | number:2}}<br/>
 		</div>
 		<div id="flags">
 			<h2>Flags</h2>
@@ -37,7 +37,7 @@
 			Dropped:     {{player.flag_drops}}<br/>
 			Returned:    {{player.flag_returns}}<br/>
 			Scored:      {{player.flag_scores}}<br/>
-			Scored/game: {{player.flag_scores / player.game_count}}<br/>
+			Scored/game: {{player.flag_scores / player.game_count | number:2}}<br/>
 		</div>
 		<div id="games">
 			<h2>Games</h2>
@@ -46,7 +46,7 @@
 			Losses:      {{player.lose_count}}({{player.lose_count / player.game_count}})<br/>
 			Ties:        {{player.tie_count}}({{player.tie_count / player.game_count}})<br/>
 			Points:      {{player.points}}<br/>
-			Points/game: {{player.points / player.game_count}}<br/>
+			Points/game: {{player.points / player.game_count | number:2}}<br/>
 			</div>
 		<div id="misc">
 			<h2>Misc</h2>
