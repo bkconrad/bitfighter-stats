@@ -108,16 +108,12 @@ a.auth, .auth {
   font-size: 10pt;
 }
 
-#frags, #games {
-  float: left;
-}
-
-#flags, #misc {
-  float: right;
-}
-
-#weapons {
-  width: 100%;
+#frags, #games, #flags, #misc, #weapons {
+  display: inline-block;
+  margin: .5em;
+  padding: .5em;
+  background: #EEE;
+  width: 40%;
 }
 
 #weapons table {
