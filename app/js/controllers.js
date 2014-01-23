@@ -11,6 +11,8 @@ phonecatApp.controller('StatsCtrl', function ($scope, $http) {
 		afterSelectionChange: function(row, event) {
 			$http.get('player.php', {params: {player: row.entity.player_name, authed: row.entity.is_authenticated == '1' ? 'yes' : 'no'}})
 			.success(function(data) {
+				data.game_count = parseInt(data.win_count, 10) + parseInt(data.lose_count, 10) + parseInt(data.tie_count, 10) + parseInt(data.dnf_count, 10);
+				data.finished_game_count = parseInt(data.win_count, 10) + parseInt(data.lose_count, 10) + parseInt(data.tie_count, 10);
 				$scope.player = data;
 			});
 		},
