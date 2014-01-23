@@ -8,7 +8,10 @@ var BADGE_MAP = {
   5: ["BBB Bronze Medalist", "bbb_bronze.png"], 
   6: ["BBB Participant", "bbb_participation.png"], 
   7: ["Level Design Contest Winner", "level_design_winner.png"], 
-  8: ["Zone Controller", "zone_controller.png"]
+  8: ["Zone Controller", "zone_controller.png"],
+  9: ["Raging Rabid Rabbit", "raging_rabid_rabbit.png"],
+  10: ["Hat Trick", "hat_trick.png"],
+  11: ["Last-Second Win", "last_second_win.png"]
 };
  
 bfstats.controller('StatsCtrl', function ($scope, $http) {
