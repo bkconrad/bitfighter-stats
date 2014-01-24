@@ -171,10 +171,7 @@ $weapons = array(
   "spybug" => 800
 );
 
-if(!$data) {
-  http_response_code(404);
-}
-
+$data['found'] = !empty($data);
 $data['achievements'] = $achievements;
 
 echo json_encode($data);
