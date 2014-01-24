@@ -19,7 +19,6 @@
 	<select ng-model="selectedPeriod" ng-options="period.pretty for period in periods">
 	</select>
 	<div ng-if="player" ng-controller="PlayerCtrl">
-		{{player}}
 		<h1 class="auth"> {{player.player_name}} </h1>
 
 		<div id="badges">
