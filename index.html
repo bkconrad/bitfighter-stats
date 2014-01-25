@@ -76,12 +76,12 @@
 				<h4>Weapons</h4>
 				<table>
 					<thead><tr><td>Weapon</td><td>Fired</td><td>Hit</td><td>Accuracy</td></tr></thead>
-					<tr><td>Phaser</td><td>{{player.phaser_shots}}</td><td>{{player.phaser_shots_struck}}</td><td>{{player.phaser_shots / (player.phaser_shots + player.phaser_shots_struck) | percentage}}</td></tr>
-					<tr><td>Bouncer</td><td>{{player.bouncer_shots}}</td><td>{{player.bouncer_shots_struck}}</td><td>{{player.bouncer_shots / (player.bouncer_shots + player.bouncer_shots_struck) | percentage}}</td></tr>
-					<tr><td>Triple</td><td>{{player.triple_shots}}</td><td>{{player.triple_shots_struck}}</td><td>{{player.triple_shots / (player.triple_shots + player.triple_shots_struck) | percentage}}</td></tr>
-					<tr><td>Burst</td><td>{{player.burst_shots}}</td><td>{{player.burst_shots_struck}}</td><td>{{player.burst_shots / (player.burst_shots + player.burst_shots_struck) | percentage}}</td></tr>
-					<tr><td>Mine</td><td>{{player.mine_shots}}</td><td>{{player.mine_shots_struck}}</td><td>{{player.mine_shots / (player.mine_shots + player.mine_shots_struck) | percentage}}</td></tr>
-					<tr><td>Spybug</td><td>{{player.spybug_shots}}</td><td>{{player.spybug_shots_struck}}</td><td>{{player.spybug_shots / (player.spybug_shots + player.spybug_shots_struck) | percentage}}</td></tr>
+					<tr><td>Phaser</td><td>{{player.phaser_shots}}</td><td>{{player.phaser_shots_struck}}</td><td>{{player.phaser_shots_struck / player.phaser_shots | percentage}}</td></tr>
+					<tr><td>Bouncer</td><td>{{player.bouncer_shots}}</td><td>{{player.bouncer_shots_struck}}</td><td>{{player.bouncer_shots_struck / player.bouncer_shots | percentage}}</td></tr>
+					<tr><td>Triple</td><td>{{player.triple_shots}}</td><td>{{player.triple_shots_struck}}</td><td>{{player.triple_shots_struck / player.triple_shots | percentage}}</td></tr>
+					<tr><td>Burst</td><td>{{player.burst_shots}}</td><td>{{player.burst_shots_struck}}</td><td>{{player.burst_shots_struck / player.burst_shots | percentage}}</td></tr>
+					<tr><td>Mine</td><td>{{player.mine_shots}}</td><td>{{player.mine_shots_struck}}</td><td>{{player.mine_shots_struck / player.mine_shots | percentage}}</td></tr>
+					<tr><td>Spybug</td><td>{{player.spybug_shots}}</td><td>{{player.spybug_shots_struck}}</td><td>{{player.spybug_shots_struck / player.spybug_shots | percentage}}</td></tr>
 				</table>
 			</div>
 		</div>
