@@ -32,7 +32,7 @@
 
 		<div class="row">
 			<div class="col-xs-6 col-md-2" id="frags">
-				<h2>Frags</h2>
+				<h4>Frags</h4>
 				Kills:      <span class="stat">{{player.kill_count}}</span><br/>
 				Deaths:     <span class="stat">{{player.death_count}}</span><br/>
 				Suicides:   <span class="stat">{{player.suicide_count}}</span><br/>
@@ -41,7 +41,7 @@
 				Spread/game:<span class="stat">{{(player.kill_count - player.death_count) / player.game_count | number:2}}</span><br/>
 			</div>
 			<div class="col-xs-6 col-md-2" id="flags">
-				<h2>Flags</h2>
+				<h4>Flags</h4>
 				Taken:      <span class="stat">{{player.flag_pickups}}</span><br/>
 				Dropped:    <span class="stat">{{player.flag_drops}}</span><br/>
 				Returned:   <span class="stat">{{player.flag_returns}}</span><br/>
@@ -50,7 +50,7 @@
 			</div>
 			<div class="clearfix visible-xs visible-sm"></div>
 			<div class="col-xs-6 col-md-2" id="games">
-				<h2>Games</h2>
+				<h4>Games</h4>
 				Played:     <span class="stat">{{player.game_count}}</span><br/>
 				Wins:       <span class="stat">{{player.win_count}}({{player.win_count / player.game_count | percentage}})</span><br/>
 				Losses:     <span class="stat">{{player.lose_count}}({{player.lose_count / player.game_count | percentage}})</span><br/>
@@ -59,7 +59,7 @@
 				Points/game:<span class="stat">{{player.points / player.game_count | number:2}}</span><br/>
 			</div>
 			<div class="col-xs-6 col-md-2" id="misc">
-				<h2>Misc</h2>
+				<h4>Misc</h4>
 				Asteroids Destroyed:    <span class="stat">{{player.asteroid_kills}}</span><br/>
 				Asteroid Crashes:       <span class="stat">{{player.asteroid_crashes}}</span><br/>
 				Force Fields Destroyed: <span class="stat">{{player.ff_kills}}</span><br/>
@@ -73,7 +73,7 @@
 				Last Seen:              <span class="stat">{{player.last_update}}</span><br/>
 			</div>
 			<div class="col-xs-12 col-md-4" id="weapons">
-				<h2>Weapons</h2>
+				<h4>Weapons</h4>
 				<table>
 					<thead><tr><td>Weapon</td><td>Fired</td><td>Hit</td><td>Accuracy</td></tr></thead>
 					<tr><td>Phaser</td><td>{{player.phaser_shots}}</td><td>{{player.phaser_shots_struck}}</td><td>{{player.phaser_shots / (player.phaser_shots + player.phaser_shots_struck) | percentage}}</td></tr>

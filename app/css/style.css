@@ -3,6 +3,7 @@ body {
 }
 
 #frags, #games, #flags, #misc, #weapons {
+  margin-bottom: 15px;
 }
 
 #weapons table {
