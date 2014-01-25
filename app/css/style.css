@@ -2,126 +2,11 @@ body {
   background: #AAA;
 }
 
-#month-select {
-  background: #FFF;
-  padding: .5em;
-  width: auto;
-  display: block;
-}
-
-#month-select > * {
-  font-family: "Droid Sans" "Arial" sans-serif;
-  padding: .5em .25em;
-}
-
-#month-select > span {
-  background: #666;
-  color: #EEE;
-}
-
-#month-select > a:hover {
-  background: #EEE;
-}
-
-
-/**
- * stats.php
- */
-a.auth, .auth {
-  text-decoration: underline;
-  font-weight: bold;
-}
-#month-select {
-  border-left: 1px solid #888;
-  border-right: 1px solid #888;
-  border-top: 1px solid #888;
-}
-#search-form {
-  margin: 0;
-  background: #EEE;
-  border-left: 1px solid #888;
-  border-right: 1px solid #888;
-  border-top: 1px solid #888;
-  padding: .5em;
-}
-#search-form fieldset {
-  display: inline-block;
-}
-#player-count {
-  float: right;
-}
-#player_name {
-  width: 120px;
-  overflow: hidden;
-}
-
-/**
- * player.php
- */
-#player-search {
-  margin-top: 1em;
-}
-#player-search, #player-search div {
-  font-family: "Droid Sans" "Arial" sans-serif;
-}
-#player-search input {
-  display: inline-block;
-}
-#player-search > div {
-  display: block;
-  width: auto;
-}
-#toggle-authenticated {
-  display: block;
-  width: 100%;
-  height: 1em;
-  font-size: 10pt;
-  font-weight: normal;
-}
-.player #month-select {
-  border: 1px solid #AAA;
-}
-.time-period {
-  float: right;
-}
-.player {
-  width: 640px;
-  margin: auto;
-  background: #F8F8FA;
-  color: #222;
-  padding: .5em;
-  border: 1px solid #888;
-}
-
-.player h1, .player h2 {
-  margin: 0;
-  margin-bottom: .25em;
-}
-
-.player div {
-  display: inline-block;
-  width: 49%;
-  margin: 0;
-  margin-bottom: 1em;
-  vertical-align: top;
-  font-family: monospace;
-  font-size: 10pt;
-}
-
 #frags, #games, #flags, #misc, #weapons {
-  display: inline-block;
-  margin: .5em;
-  padding: .5em;
-  background: #EEE;
-  width: 40%;
 }
 
 #weapons table {
   width: 100%;
-}
-
-.player th {
-  padding: 0 .5em;
 }
 
 .stat {
@@ -129,13 +14,6 @@ a.auth, .auth {
 }
 
 .badge {
-}
-
-/**
- * shared
- */
-.loading {
-  content: "Loading...";
 }
 
 .stats {
