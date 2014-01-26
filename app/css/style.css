@@ -1,5 +1,6 @@
 body {
-  background: #111;
+  background: #000;
+  background-image: url(../img/stars.gif);
   color: #AAA;
 }
 
@@ -48,6 +49,17 @@ h4 {
   /*text-align: left;*/
 }
 
+.container {
+  background: rgba(0, 0, 0, .85);
+}
+
+.period {
+  border: 1px solid #EEE;
+  background: #DDD;
+  color: #222;
+  margin: .5em 0;
+}
+
 .stat {
   float: right;
   color: #EEE;
@@ -79,11 +91,15 @@ h4 {
 }
 
 .ngRow.even {
-  background: #222;
+  background: #0A0A0A;
 }
 
 .ngRow.odd { 
   background: none;
+}
+
+.ngRow.selected {
+  background: #142030;
 }
 
 .ngVerticalBar {
