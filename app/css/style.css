@@ -72,6 +72,12 @@ h4 {
   height: 400px;
 }
 
+.loading {
+  position: absolute;
+  top: .5em;
+  right: .5em;
+}
+
 /**
  * Grid styles
  */

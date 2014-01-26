@@ -21,6 +21,7 @@
 <body ng-controller="StatsCtrl">
 
 	<div class="container">
+		<div class="loading" ng-if="statsLoading || playerStatsLoading">Loading...</div>
 		<select class="period" ng-model="selectedPeriod" ng-options="period.pretty for period in periods">
 		</select>
 		<div class="stats" ng-if="stats && stats.count > 0" ng-grid="options"></div>

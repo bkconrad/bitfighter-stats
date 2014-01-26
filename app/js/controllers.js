@@ -24,6 +24,12 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 			year: $scope.selectedPeriod.year
 		};
 
+		if($scope.statsLoading) {
+			return;
+		}
+
+		$scope.statsLoading = true;
+
 		$http.get('stats.php', { params: params})
 		.success(function(data) {
 			$scope.total = data.count;
@@ -36,6 +42,9 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 		})
 		.error(function(data, status, headers, config) {
 			console.log(status);
+		})
+		['finally'](function() {
+			$scope.statsLoading = false;
 		});
 	}
 
@@ -46,6 +55,12 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 			player: $scope.selectedPlayer.player_name,
 			authed: $scope.selectedPlayer.is_authenticated === '1' ? 'yes' : 'no'
 		};
+
+		if($scope.playerStatsLoading) {
+			return;
+		}
+
+		$scope.playerStatsLoading = true;
 
 		$http.get('player.php', {params: params})
 		.success(function(data) {
@@ -70,6 +85,12 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 				achievement.image = BADGE_MAP[achievement.achievement_id][1];
 			}
 			$scope.player = data;
+		})
+		.error(function(data, status, headers, config) {
+			console.log(status);
+		})
+		['finally'](function() {
+			$scope.playerStatsLoading = false;
 		});
 	}
 
