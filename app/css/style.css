@@ -1,26 +1,103 @@
 body {
-  background: #AAA;
+  background: #111;
+  color: #AAA;
+}
+
+h1, h2, h3, h4, h5, h6 {
+}
+
+h4 {
+  /*border-bottom: 1px solid #EEE;*/
+  background: #010101;
+  color: #CCC;
+  padding: .25em;
+  border-bottom: 2px solid #444;
 }
 
 #frags, #games, #flags, #misc, #weapons {
   margin-bottom: 15px;
 }
 
+#frags > h4 {
+  border-bottom-color: #80100F;
+}
+
+#flags > h4 {
+  border-bottom-color: #4c1348;
+}
+
+#games > h4 {
+  border-bottom-color: #142030;
+}
+
+#misc > h4 {
+  border-bottom-color: #476f26;
+}
+
 #weapons table {
   width: 100%;
+  text-align: right;
+}
+
+#weapons table .weapon {
+  text-align: left;
+}
+
+#weapons table > thead {
+  text-decoration: underline;
+  /*text-align: left;*/
 }
 
 .stat {
   float: right;
+  color: #EEE;
 }
 
-.badge {
+.achievement {
 }
 
 .stats {
   height: 400px;
 }
 
+/**
+ * Grid styles
+ */
+
+.ngGrid {
+  background: none;
+}
+
+.ngTopPanel, .ngHeaderContainer, .ngHeaderScroller {
+  background: #010101;
+  border-bottom: 1px solid #444;
+}
+
+.ngRow {
+  background: none;
+  border-bottom: 1px solid transparent;
+}
+
+.ngRow.even {
+  background: #222;
+}
+
+.ngRow.odd { 
+  background: none;
+}
+
 .ngVerticalBar {
   height: 100%;
+}
+
+.ngHeaderCell {
+  background: none;
+}
+
+.ngCell {
+  background: none;
+}
+
+.ngVerticalBar {
+  background: none;
 }
