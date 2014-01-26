@@ -85,6 +85,11 @@ h4 {
   border-bottom: 1px solid #444;
 }
 
+.ngColMenu {
+  background: #000000;
+  border: 1px solid #444;
+}
+
 .ngRow {
   background: none;
   border-bottom: 1px solid transparent;
