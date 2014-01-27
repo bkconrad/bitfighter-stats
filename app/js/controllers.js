@@ -152,38 +152,71 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 });
 
 bfstats.controller('GamesCtrl', function ($scope, $http) {
+	$scope.graphOptions = {
+		data: 'games',
+		x: 'x',
+		y: ['players_per_game', 'unique_player_count']
+	};
+
 	$http.get('players_per_game.php')
 		.success(function(data) {
 			$scope.games = data;
+			console.log(data);
 		})
 		.error(function(data, status, headers, config) {
 			console.log(data);
 		});
 });
 
+function reader(propName) {
+	return function(x) {
+		return x[propName];
+	};
+}
+
+/**
+ * Create overlapping graphs of data
+ * Usage:
+ * 
+ *   <div bf-graph="graphOptions"></div>
+ *   ...
+ *   $scope.graphOptions = {
+ *     data: 'data',
+ *     x: 'x_property',
+ *     y: ['y_property1', 'y_property2' ]
+ *   }
+ *   $scope.data = []; // data goes here
+ */
 bfstats.directive('bfGraph', function() {
 	return {
 		template: '<canvas></canvas>',
 		link: function(scope, element, attributes) {
 			var canvas = element.find('canvas');
-			scope.$watch(attributes['bfGraph'], function(newVal, oldVal, scope) {
-				console.log('new val', newVal);
-				console.log(element);
-				/* Sizing and scales. */
-				var w = element[0].clientWidth,
-				    h = element[0].clientWidth / 1.618,
-				    data = [],
-				    x,
-				    y,
-				    k;
+			var options = scope.$eval(attributes['bfGraph']);
 
+			scope.$watch(options.data, function(newVal, oldVal, scope) {
+				/* Sizing and scales. */
+				var w = element[0].clientWidth;
+				var h = element[0].clientWidth / 1.618;
+				var data = [];
+				var x;
+				var y;
+				var yprop;
+				var k;
+				var k2;
+				var COLORS = [ '#80100F', '#4c1348', '#142030', '#476f26' ];
+
+				// bail if the value is falsey
 				if(!newVal) {
 					return;
 				}
 
+				// convert collections to arrays
 				for(k in newVal) {
 					if(newVal.hasOwnProperty(k)) {
 						data.push(newVal[k]);
+
+						// add an index field to the data
 						data[data.length-1].x = data.length;
 					}
 				}
@@ -195,17 +228,13 @@ bfstats.directive('bfGraph', function() {
 				var vis = new pv.Panel()
 					.fillStyle('#000')
 				    .width(w)
-				    .height(h)
-				    .bottom(20)
-				    .left(20)
-				    .right(10)
-				    .top(5);
+				    .height(h);
 
 				/* Y-axis and ticks. */
 				vis.add(pv.Rule)
 				    .data(y.ticks(5))
 				    .bottom(y)
-				    .strokeStyle(function(d) { return d ? "#444" : "#000"; })
+				    .strokeStyle(function(d) { return d ? "#222" : "#000"; })
 				  .anchor("left").add(pv.Label)
 				  	.textStyle('#EEE')
 				    .text(y.tickFormat);
@@ -221,15 +250,35 @@ bfstats.directive('bfGraph', function() {
 				  	.textStyle('#EEE')
 				    .text(x.tickFormat);
 
-				/* The area with top line. */
-				vis.add(pv.Line)
-					.data(data)
-				    .bottom(1)
-				    .left(function(d) { return x(d.x); })
-				    .top(function(d) { return y(parseFloat(d.players_per_game)); })
-				    .strokeStyle("#142030")
-				    .lineWidth(3);
+				for(k in options.y) {
+					if(options.y.hasOwnProperty(k)) {
+						yprop = options.y[k];
+						values = [];
+						min = 0;
+						max = -Infinity;
 
+						// collect the values
+						for(k2 in data) {
+							if(data.hasOwnProperty(k2)) {
+								value = parseFloat(data[k2][yprop]);
+								values.push(value);
+								min = Math.min(min, value);
+								max = Math.max(max, value);
+							}
+						}
+
+					    y = pv.Scale.linear(min, max).range(0, h);
+
+						vis.add(pv.Line)
+							.data(data)
+						    .bottom(1)
+						    .left(function(d) { return x(d.x); })
+						    .top(function(scale,prop,datum) { return scale(parseFloat(datum[prop])); }.bind(false, y, yprop))
+						    .strokeStyle(COLORS.pop())
+						    .lineWidth(3);
+
+					}
+				}
 				vis.canvas = canvas;
 				vis.render();	
 			});
