@@ -151,7 +151,90 @@ bfstats.controller('StatsCtrl', function ($scope, $http) {
 	getAllStats();
 });
 
-bfstats.controller('PlayerCtrl', function ($scope, $http) {
+bfstats.controller('GamesCtrl', function ($scope, $http) {
+	$http.get('players_per_game.php')
+		.success(function(data) {
+			$scope.games = data;
+		})
+		.error(function(data, status, headers, config) {
+			console.log(data);
+		});
+});
+
+bfstats.directive('bfGraph', function() {
+	return {
+		template: '<canvas></canvas>',
+		link: function(scope, element, attributes) {
+			var canvas = element.find('canvas');
+			scope.$watch(attributes['bfGraph'], function(newVal, oldVal, scope) {
+				console.log('new val', newVal);
+				console.log(element);
+				/* Sizing and scales. */
+				var w = element[0].clientWidth,
+				    h = element[0].clientWidth / 1.618,
+				    data = [],
+				    x,
+				    y,
+				    k;
+
+				if(!newVal) {
+					return;
+				}
+
+				for(k in newVal) {
+					if(newVal.hasOwnProperty(k)) {
+						data.push(newVal[k]);
+						data[data.length-1].x = data.length;
+					}
+				}
+
+			    x = pv.Scale.linear(data, function(d) { return d.x; }).range(0, w);
+			    y = pv.Scale.linear(0, 4).range(0, h);
+
+				/* The root panel. */
+				var vis = new pv.Panel()
+					.fillStyle('#000')
+				    .width(w)
+				    .height(h)
+				    .bottom(20)
+				    .left(20)
+				    .right(10)
+				    .top(5);
+
+				/* Y-axis and ticks. */
+				vis.add(pv.Rule)
+				    .data(y.ticks(5))
+				    .bottom(y)
+				    .strokeStyle(function(d) { return d ? "#444" : "#000"; })
+				  .anchor("left").add(pv.Label)
+				  	.textStyle('#EEE')
+				    .text(y.tickFormat);
+
+				/* X-axis and ticks. */
+				vis.add(pv.Rule)
+				    .data(x.ticks())
+				    .visible(function(d) { return d; })
+				    .left(x)
+				    .bottom(-5)
+				    .height(5)
+				  .anchor("bottom").add(pv.Label)
+				  	.textStyle('#EEE')
+				    .text(x.tickFormat);
+
+				/* The area with top line. */
+				vis.add(pv.Line)
+					.data(data)
+				    .bottom(1)
+				    .left(function(d) { return x(d.x); })
+				    .top(function(d) { return y(parseFloat(d.players_per_game)); })
+				    .strokeStyle("#142030")
+				    .lineWidth(3);
+
+				vis.canvas = canvas;
+				vis.render();	
+			});
+		}
+	};
 });
 
 bfstats.filter('percentage', function() {

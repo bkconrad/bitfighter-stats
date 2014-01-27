@@ -12,6 +12,7 @@
   <script src="lib/ng-grid/lib/jquery.layout-latest.min.js"></script>
   <script src="lib/ng-grid/ng-grid-2.0.7.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/protovis/protovis.min.js"></script>
   <link rel="stylesheet" type="text/css" href="lib/ng-grid/ng-grid.css" /> 
   <link rel="stylesheet" type="text/css" href="lib/ng-grid/lib/bootstrap/css/bootstrap.min.css" /> 
   <link rel="stylesheet" type="text/css" href="lib/ng-grid/lib/bootstrap/css/bootstrap-responsive.min.css" /> 
@@ -32,7 +33,7 @@
 		<div ng-if="player && !player.found">
 			No stats found for {{selectedPlayer.player_name}} during {{selectedPeriod.pretty}}
 		</div>
-		<div ng-if="player.found" ng-controller="PlayerCtrl">
+		<div ng-if="player.found">
 			<h1 class="auth"> {{player.player_name}} </h1>
 
 			<div id="badges">
@@ -95,6 +96,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="games" ng-controller="GamesCtrl" bf-graph="games"></div>
 	</div>
 
 </body>

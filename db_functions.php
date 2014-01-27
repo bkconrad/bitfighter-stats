@@ -26,4 +26,3 @@ function sanitize($mysqli, $str) {
 	
 	return $str;
 }
-?>
