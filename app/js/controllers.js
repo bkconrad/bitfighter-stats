@@ -189,9 +189,7 @@ function reader(propName) {
  */
 bfstats.directive('bfGraph', function() {
 	return {
-		template: '<canvas></canvas>',
 		link: function(scope, element, attributes) {
-			var canvas = element.find('canvas');
 			var options = scope.$eval(attributes['bfGraph']);
 
 			scope.$watch(options.data, function(newVal, oldVal, scope) {
@@ -279,7 +277,7 @@ bfstats.directive('bfGraph', function() {
 
 					}
 				}
-				vis.canvas = canvas;
+				vis.canvas(element[0]);
 				vis.render();	
 			});
 		}
