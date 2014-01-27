@@ -20,8 +20,8 @@ angular.module('bfstats.directives', [])
 
 				scope.$watch(options.data, function(newVal, oldVal, scope) {
 					/* Sizing and scales. */
-					var w = element[0].clientWidth;
-					var h = element[0].clientWidth / 1.618;
+					var w = 300 * 1.618;
+					var h = 300;
 					var data = [];
 					var x;
 					var y;
@@ -52,7 +52,10 @@ angular.module('bfstats.directives', [])
 					var vis = new pv.Panel()
 						.fillStyle('#000')
 					    .width(w)
-					    .height(h);
+					    .height(h)
+					    .left(30)
+					    .bottom(30)
+					    ;
 
 					/* Y-axis and ticks. */
 					vis.add(pv.Rule)
