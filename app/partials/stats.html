@@ -1,0 +1,73 @@
+<select class="period" ng-model="selectedPeriod" ng-options="period.pretty for period in periods">
+</select>
+<div class="stats" ng-if="stats && stats.count > 0" ng-grid="options"></div>
+<div class="no-stats" ng-if="stats && stats.count === 0">No stats found for {{selectedPeriod.pretty}}</div>
+<noscript ng-if="!stats">
+	A modern, JavaScript-enabled browser is required to use this page.
+</noscript>
+<div ng-if="player && !player.found">
+	No stats found for {{selectedPlayer.player_name}} during {{selectedPeriod.pretty}}
+</div>
+<div ng-if="player.found">
+	<h1 class="auth"> {{player.player_name}} </h1>
+
+	<div id="badges">
+		<span class="achievement" ng-if="player.achievements" ng-repeat="achievement in player.achievements"><img title="{{achievement.hint}}" src="badges/{{achievement.image}}"></img></span>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-6 col-md-2" id="frags">
+			<h4>Frags</h4>
+			Kills:      <span class="stat">{{player.kill_count}}</span><br/>
+			Deaths:     <span class="stat">{{player.death_count}}</span><br/>
+			Suicides:   <span class="stat">{{player.suicide_count}}</span><br/>
+			KDR:        <span class="stat">{{player.kill_death_ratio | number:2}}</span><br/>
+			Spread:     <span class="stat">{{player.kill_count - player.death_count}}</span><br/>
+			Spread/game:<span class="stat">{{(player.kill_count - player.death_count) / player.game_count | number:2}}</span><br/>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-2" id="flags">
+			<h4>Flags</h4>
+			Taken:      <span class="stat">{{player.flag_pickups}}</span><br/>
+			Dropped:    <span class="stat">{{player.flag_drops}}</span><br/>
+			Returned:   <span class="stat">{{player.flag_returns}}</span><br/>
+			Scored:     <span class="stat">{{player.flag_scores}}</span><br/>
+			Scored/game:<span class="stat">{{player.flag_scores / player.game_count | number:2}}</span><br/>
+		</div>
+		<div class="clearfix visible-xs visible-sm"></div>
+		<div class="col-xs-12 col-sm-6 col-md-2" id="games">
+			<h4>Games</h4>
+			Played:     <span class="stat">{{player.game_count}}</span><br/>
+			Wins:       <span class="stat">{{player.win_count}}({{player.win_count / player.game_count | percentage}})</span><br/>
+			Losses:     <span class="stat">{{player.lose_count}}({{player.lose_count / player.game_count | percentage}})</span><br/>
+			Ties:       <span class="stat">{{player.tie_count}}({{player.tie_count / player.game_count | percentage}})</span><br/>
+			Points:     <span class="stat">{{player.points}}</span><br/>
+			Points/game:<span class="stat">{{player.points / player.game_count | number:2}}</span><br/>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-2" id="misc">
+			<h4>Misc</h4>
+			Asteroids Destroyed:    <span class="stat">{{player.asteroid_kills}}</span><br/>
+			Asteroid Crashes:       <span class="stat">{{player.asteroid_crashes}}</span><br/>
+			Force Fields Destroyed: <span class="stat">{{player.ff_kills}}</span><br/>
+			Force Fields Engineered:<span class="stat">{{player.ffs_engineered}}</span><br/>
+			Turrets Destroyed:      <span class="stat">{{player.turret_kills}}</span><br/>
+			Turrets Engineered:     <span class="stat">{{player.turrets_engineered}}</span><br/>
+			Teleporters Engineered: <span class="stat">{{player.teleports_engineered}}</span><br/>
+			Distance Traveled:      <span class="stat">{{player.distance_traveled}}</span><br/>
+			Teleportations:         <span class="stat">{{player.teleport_uses}}</span><br/>
+			Team Switches:          <span class="stat">{{player.switched_team_count}}</span><br/>
+			Last Seen:              <span class="stat">{{player.last_update}}</span><br/>
+		</div>
+		<div class="col-xs-12 col-md-4" id="weapons">
+			<h4>Weapons</h4>
+			<table>
+				<thead><tr><td class="weapon">Weapon</td><td>Fired</td><td>Hit</td><td>Accuracy</td></tr></thead>
+				<tr><td class="weapon">Phaser</td><td>{{player.phaser_shots}}</td><td>{{player.phaser_shots_struck}}</td><td>{{player.phaser_shots_struck / player.phaser_shots | percentage}}</td></tr>
+				<tr><td class="weapon">Bouncer</td><td>{{player.bouncer_shots}}</td><td>{{player.bouncer_shots_struck}}</td><td>{{player.bouncer_shots_struck / player.bouncer_shots | percentage}}</td></tr>
+				<tr><td class="weapon">Triple</td><td>{{player.triple_shots}}</td><td>{{player.triple_shots_struck}}</td><td>{{player.triple_shots_struck / player.triple_shots | percentage}}</td></tr>
+				<tr><td class="weapon">Burst</td><td>{{player.burst_shots}}</td><td>{{player.burst_shots_struck}}</td><td>{{player.burst_shots_struck / player.burst_shots | percentage}}</td></tr>
+				<tr><td class="weapon">Mine</td><td>{{player.mine_shots}}</td><td>{{player.mine_shots_struck}}</td><td>{{player.mine_shots_struck / player.mine_shots | percentage}}</td></tr>
+				<tr><td class="weapon">Spybug</td><td>{{player.spybug_shots}}</td><td>{{player.spybug_shots_struck}}</td><td>{{player.spybug_shots_struck / player.spybug_shots | percentage}}</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
