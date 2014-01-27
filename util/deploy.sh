@@ -1,18 +1,18 @@
 #!/bin/bash
 
 DEPLOY_HOST=bitfighter.org
-DEPLOY_DIR=/var/www/html/stats
+DEPLOY_DIR=/var/www/html/new-stats
 DEPLOY_FILES=$(cat <<EOF
+app/
+lib/
+assets/
+badges/
 lib.php
-index.php
+index.html
+db_functions.php.changeme
 stats.php
 player.php
-player_stats.css
-graphs/graph1.php
-graphs/graph2.php
-graphs/graph2.php.cumulative
-graphs/graphs.php
-graphs/index.php
+players_per_game.php
 EOF
 )
 
@@ -26,4 +26,4 @@ do
 	DEPLOY_PATHS="$DEPLOY_PATHS $ROOT/$FILE"
 done
 
-scp $DEPLOY_PATHS "$DEPLOY_HOST:$DEPLOY_DIR"
+scp -r $DEPLOY_PATHS "$DEPLOY_HOST:$DEPLOY_DIR"
