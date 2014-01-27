@@ -24,8 +24,11 @@
   <link rel="stylesheet" type="text/css" href="app/css/style.css" /> 
 </head>
 <body>
-
 	<div class="container">
+		<div class="navmenu row">
+			<a class="col-xs-3" href="#/">Stats</a>
+			<a class="col-xs-3" href="#/games">Games</a>
+		</div>
 		<div class="loading" ng-if="statsLoading || playerStatsLoading">Loading...</div>
 		<div ng-view></div>
 	</div>

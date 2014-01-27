@@ -49,6 +49,30 @@ h4 {
   /*text-align: left;*/
 }
 
+.navmenu {
+  line-height: 60px;
+  font-size: 30px;
+  margin: 0 0 13px 0;
+  border-bottom: 2px solid #444;
+}
+
+.navmenu a {
+  display: inline-block;
+  font-weight: bold;
+  text-shadow: 0 2px #010101;
+  text-align: center;
+  color: #AAA;
+}
+
+.navmenu a:hover {
+  background: #142030;
+  text-decoration: none;
+}
+
+.navmenu .container {
+  background: none;
+}
+
 .container {
   background: rgba(0, 0, 0, .85);
 }
