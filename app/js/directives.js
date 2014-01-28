@@ -9,7 +9,7 @@ angular.module('bfstats.directives', [])
 	 *   $scope.graphOptions = {
 	 *     data: 'data',
 	 *     x: 'x_property',
-	 *     y: ['y_property1', 'y_property2' ]
+	 *     y: 'y_property'
 	 *   }
 	 *   $scope.data = []; // data goes here
 	 */
@@ -26,7 +26,8 @@ angular.module('bfstats.directives', [])
 					var data = [];
 					var x;
 					var y;
-					var yprop;
+					var xprop = options.x;
+					var yprop = options.y;
 					var k;
 					var k2;
 					var COLORS = [ '#80100F', '#4c1348', '#142030', '#476f26' ];
@@ -40,7 +41,6 @@ angular.module('bfstats.directives', [])
 					// convert collections to arrays
 					for(k in newVal) {
 						if(newVal.hasOwnProperty(k)) {
-							newVal[k].players_per_game = parseFloat(newVal[k].players_per_game);
 							data.push(newVal[k]);
 
 							// add an index field to the data
@@ -48,7 +48,7 @@ angular.module('bfstats.directives', [])
 						}
 					}
 
-					var xMax = d3.max(data, function(d) { return d.x; });
+					var xMax = d3.max(data, function(d) { return d[xprop]; });
 					var xScale = d3.scale.linear()
 						.domain([1, xMax + 2])
 						.range([0, w - padding])
@@ -59,7 +59,8 @@ angular.module('bfstats.directives', [])
 						.orient('bottom')
 						;
 
-					var yMax = d3.max(data, function(d) { return d.players_per_game; });
+					var yMax = d3.max(data, function(d) { return parseFloat(d[yprop]); });
+					console.log(yMax);
 					var yScale = d3.scale.linear()
 						.domain([0, yMax])
 						.range([h, 0])
@@ -84,13 +85,12 @@ angular.module('bfstats.directives', [])
 							.call(yAxis)
 						;
 
-					var line = d3.svg.area()
+					var line = d3.svg.line()
 						.x(function(d) {
-							console.log(d);
-							return xScale(d.x) + padding + w / data.length / 2;
+							return xScale(d[xprop]) + padding + w / data.length / 2;
 						})
 						.y(function(d) {
-							return h - yScale(d.players_per_game);
+							return yScale(d[yprop]);
 						})
 						.interpolate('basis')
 						;
@@ -103,13 +103,14 @@ angular.module('bfstats.directives', [])
 						.style('background', '#000')
 						.style('margin', 'auto')
 						.style('display', 'block')
-						.append('path')
-							.attr('d', line(data))
+						.append('svg:path')
+							.data([data])
+							.attr('d', line)
 							.attr('stroke', '#FFF')
-							.attr('fill', '#FFF')
+							// .attr('fill', '#FFF')
 						;
 
-					console.log(d3.select(element[0]).select('svg g'));
+					console.log(data);
 
 				});
 			}
