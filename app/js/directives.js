@@ -106,6 +106,7 @@ angular.module('bfstats.directives', [])
 							.data([data])
 							.attr('d', line)
 							.attr('stroke', '#FFF')
+							.attr('stroke-width', 3)
 						;
 
 
@@ -122,6 +123,7 @@ angular.module('bfstats.directives', [])
 							.attr('r', 6)
 							.attr('stroke', '#FFF')
 							.attr('fill', '#888')
+							.attr('stroke-width', 3)
 							.on('mouseover', function(d, i) {
 								var $this = d3.select(this);
 								$this.attr('fill', '#CCC');
