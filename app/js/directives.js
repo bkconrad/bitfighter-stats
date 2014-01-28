@@ -101,7 +101,7 @@ angular.module('bfstats.directives', [])
 						.attr('y', function(d) {
 							return h - yScale(d.players_per_game);
 						})
-						.attr('width', w / data.length - 5)
+						.attr('width', Math.max(1, w / data.length - 3))
 						.attr('height', function(d) {
 							return yScale(d.players_per_game);
 						})
