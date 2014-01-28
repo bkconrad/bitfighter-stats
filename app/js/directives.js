@@ -196,4 +196,80 @@ angular.module('bfstats.directives', [])
 			}
 		};
 	})
+	.directive('bfRank', function() {
+		return {
+			template: '<svg></svg>',
+			link: function(scope, element, attributes) {
+				var prop = scope.$eval(attributes['bfRank']);
+				var stats = scope.$eval('stats');
+				var w = 150;
+				var h = 15;
+				var buckets = 100;
+				var svg = d3.select(element[0]).select('svg');
+				var data = [];
+				var k;
+				var xScale, yScale, xAxis, yAxis, hist, histData, binMax;
+
+				for(k in stats) {
+					data.push(stats[k]);
+				}
+
+				xScale = d3.scale.linear()
+					.domain([0, buckets])
+					.range([0, w])
+					.nice()
+					;
+
+				xAxis = d3.svg.axis()
+					.scale(xScale)
+					.orient('bottom')
+					;
+
+				yExtent = d3.extent(data, function(d) { return parseFloat(d[prop]); });
+				hist = d3.layout.histogram()
+					.value(function(d) {
+						return d[prop] > 0 ? d[prop] : null;
+					})
+					.range(yExtent)
+					.bins(buckets)
+					;
+				histData = hist(data);
+
+				binMax = d3.max(histData, function(d) {
+					return d.y;
+				});
+
+				yScale = d3.scale.linear()
+					.domain([0, binMax])
+					.range([h, 0])
+					;
+
+				yAxis = d3.svg.axis()
+					.scale(yScale)
+					.orient('left')
+					;
+
+				svg.attr('width', w);
+				svg.attr('height', h);
+
+				svg.selectAll('rect')
+					.data(histData)
+				.enter().append('svg:rect')
+					.attr('fill', '#FFF')
+					.attr('x', function(d, i) {
+						return w / buckets * i;
+					})
+					.attr('y', function(d, i) {
+						return yScale(d.y);
+					})
+					.attr('width', function(d, i) {
+						return w / buckets - 1;
+					})
+					.attr('height', function(d, i) {
+						return h - yScale(d.y);
+					})
+					;
+			}
+		};
+	})
 	;

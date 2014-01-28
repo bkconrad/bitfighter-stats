@@ -19,7 +19,7 @@
 		<div class="col-xs-12 col-md-4" ng-repeat="(group, propertyDefs) in propertyMap" id="{{group}}">
 			<h4>{{group}}</h4>
 			<div ng-repeat="property in propertyDefs">
-			{{property.name}} <span class="stat">{{player[property.name]}}</span>
+			{{property.name}} <span class="stat">{{player[property.name]}}</span><span bf-rank="property.name"></span>
 			</div>
 		</div>
 		<div class="col-xs-12 col-md-4" id="weapons">
