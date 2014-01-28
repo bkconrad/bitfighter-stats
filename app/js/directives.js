@@ -51,7 +51,7 @@ angular.module('bfstats.directives', [])
 					var xMax = d3.max(data, function(d) { return d[xprop]; });
 					var xScale = d3.scale.linear()
 						.domain([1, xMax + 2])
-						.range([0, w - padding])
+						.range([padding, w])
 						;
 
 					var xAxis = d3.svg.axis()
@@ -62,7 +62,7 @@ angular.module('bfstats.directives', [])
 					var yMax = d3.max(data, function(d) { return parseFloat(d[yprop]); });
 					console.log(yMax);
 					var yScale = d3.scale.linear()
-						.domain([0, yMax])
+						.domain([0, yMax * 1.1])
 						.range([h, 0])
 						;
 
@@ -74,7 +74,7 @@ angular.module('bfstats.directives', [])
 					d3.select(element[0]).select('svg')
 						.append('g')
 							.attr('stroke', '#EEE')
-							.attr('transform', 'translate(' + padding +',' + (h) + ')')
+							.attr('transform', 'translate(0,' + (h) + ')')
 							.call(xAxis)
 						;
 
@@ -87,7 +87,7 @@ angular.module('bfstats.directives', [])
 
 					var line = d3.svg.line()
 						.x(function(d) {
-							return xScale(d[xprop]) + padding;
+							return xScale(d[xprop]);
 						})
 						.y(function(d) {
 							return yScale(d[yprop]);
@@ -114,7 +114,7 @@ angular.module('bfstats.directives', [])
 						.data(data)
 						.enter().append('svg:circle')
 							.attr('cx', function(d) {
-								return xScale(d[xprop]) + padding;
+								return xScale(d[xprop]);
 							})
 							.attr('cy', function(d) {
 								return yScale(d[yprop]);
