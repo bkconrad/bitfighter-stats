@@ -153,12 +153,14 @@ angular.module('bfstats.controllers', ['ngGrid'])
 
 	.controller('GamesCtrl', function ($scope, $http) {
 		$scope.playersPerGameOptions = {
+			header: 'Players Per Game',
 			data: 'games',
 			x: 'x',
 			y: 'players_per_game'
 		};
 
 		$scope.uniquePlayersOptions = {
+			header: 'Unique Players',
 			data: 'games',
 			x: 'x',
 			y: 'unique_player_count'
