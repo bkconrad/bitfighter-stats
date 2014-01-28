@@ -15,6 +15,7 @@ angular.module('bfstats.directives', [])
 	 */
 	.directive('bfGraph', function() {
 		return {
+			template: '<svg></svg>',
 			link: function(scope, element, attributes) {
 				var options = scope.$eval(attributes['bfGraph']);
 
@@ -29,6 +30,7 @@ angular.module('bfstats.directives', [])
 					var k;
 					var k2;
 					var COLORS = [ '#80100F', '#4c1348', '#142030', '#476f26' ];
+					var padding = 30;
 
 					// bail if the value is falsey
 					if(!newVal) {
@@ -38,6 +40,7 @@ angular.module('bfstats.directives', [])
 					// convert collections to arrays
 					for(k in newVal) {
 						if(newVal.hasOwnProperty(k)) {
+							newVal[k].players_per_game = parseFloat(newVal[k].players_per_game);
 							data.push(newVal[k]);
 
 							// add an index field to the data
@@ -45,69 +48,65 @@ angular.module('bfstats.directives', [])
 						}
 					}
 
-				    x = pv.Scale.linear(data, function(d) { return d.x; }).range(0, w);
-				    y = pv.Scale.linear(0, 4).range(0, h);
+					var xMax = d3.max(data, function(d) { return d.x; });
+					var xScale = d3.scale.linear()
+						.domain([1, xMax + 2])
+						.range([0, w - padding])
+						;
 
-					/* The root panel. */
-					var vis = new pv.Panel()
-						.fillStyle('#000')
-					    .width(w)
-					    .height(h)
-					    .left(30)
-					    .bottom(30)
-					    ;
+					var xAxis = d3.svg.axis()
+						.scale(xScale)
+						.orient('bottom')
+						;
 
-					/* Y-axis and ticks. */
-					vis.add(pv.Rule)
-					    .data(y.ticks(5))
-					    .bottom(y)
-					    .strokeStyle(function(d) { return d ? "#222" : "#000"; })
-					  .anchor("left").add(pv.Label)
-					  	.textStyle('#EEE')
-					    .text(y.tickFormat);
+					var yMax = d3.max(data, function(d) { return d.players_per_game; });
+					var yScale = d3.scale.linear()
+						.domain([0, yMax])
+						.range([h, 0])
+						;
 
-					/* X-axis and ticks. */
-					vis.add(pv.Rule)
-					    .data(x.ticks())
-					    .visible(function(d) { return d; })
-					    .left(x)
-					    .bottom(-5)
-					    .height(5)
-					  .anchor("bottom").add(pv.Label)
-					  	.textStyle('#EEE')
-					    .text(x.tickFormat);
+					var yAxis = d3.svg.axis()
+						.scale(yScale)
+						.orient('left')
+						;
 
-					for(k in options.y) {
-						if(options.y.hasOwnProperty(k)) {
-							yprop = options.y[k];
-							values = [];
-							min = 0;
-							max = -Infinity;
+					d3.select(element[0]).select('svg')
+						.append('g')
+							.attr('stroke', '#EEE')
+							.attr('transform', 'translate(' + padding +',' + (h) + ')')
+							.call(xAxis)
+						;
 
-							// collect the values
-							for(k2 in data) {
-								if(data.hasOwnProperty(k2)) {
-									value = parseFloat(data[k2][yprop]);
-									values.push(value);
-									min = Math.min(min, value);
-									max = Math.max(max, value);
-								}
-							}
+					d3.select(element[0]).select('svg')
+						.append('g')
+							.attr('stroke', '#EEE')
+							.attr('transform', 'translate(' + padding + ',0)')
+							.call(yAxis)
+						;
 
-						    y = pv.Scale.linear(min, max).range(0, h);
-
-							vis.add(pv.Line)
-								.data(data)
-							    .bottom(1)
-							    .left(function(d) { return x(d.x); })
-							    .top(function(scale,prop,datum) { return scale(parseFloat(datum[prop])); }.bind(false, y, yprop))
-							    .strokeStyle(COLORS.pop())
-							    .lineWidth(3);
-
-						}
-					}
-					vis.canvas(element[0]);
-					vis.render();	
+					d3.select(element[0]).select('svg')
+						.attr('width', w + 2*padding)
+						.attr('height', h + padding)
+						.style('background', '#000')
+						.style('margin', 'auto')
+						.style('display', 'block')
+					.selectAll('rect')
+						.data(data)
+						.enter()
+						.append('rect')
+						.attr('fill', '#EEE')
+						.attr('x', function(d) {
+							return xScale(d.x) + padding + w / data.length / 2;
+						})
+						.attr('y', function(d) {
+							return h - yScale(d.players_per_game);
+						})
+						.attr('width', w / data.length - 5)
+						.attr('height', function(d) {
+							return yScale(d.players_per_game);
+						})
+						;
+					console.log(data);
 				});
 			}
 		};

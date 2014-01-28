@@ -161,7 +161,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
 		$http.get('players_per_game.php')
 			.success(function(data) {
 				$scope.games = data;
-				console.log(data);
 			})
 			.error(function(data, status, headers, config) {
 				console.log(data);
