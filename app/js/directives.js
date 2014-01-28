@@ -87,12 +87,11 @@ angular.module('bfstats.directives', [])
 
 					var line = d3.svg.line()
 						.x(function(d) {
-							return xScale(d[xprop]) + padding + w / data.length / 2;
+							return xScale(d[xprop]) + padding;
 						})
 						.y(function(d) {
 							return yScale(d[yprop]);
 						})
-						.interpolate('basis')
 						;
 
 					var svg = element.find('svg')[0];
@@ -107,7 +106,51 @@ angular.module('bfstats.directives', [])
 							.data([data])
 							.attr('d', line)
 							.attr('stroke', '#FFF')
-							// .attr('fill', '#FFF')
+						;
+
+
+					d3.select(svg)
+						.selectAll('circle')
+						.data(data)
+						.enter().append('svg:circle')
+							.attr('cx', function(d) {
+								return xScale(d[xprop]) + padding;
+							})
+							.attr('cy', function(d) {
+								return yScale(d[yprop]);
+							})
+							.attr('r', 6)
+							.attr('stroke', '#FFF')
+							.attr('fill', '#888')
+							.on('mouseover', function(d, i) {
+								var $this = d3.select(this);
+								$this.attr('fill', '#CCC');
+								d3.select(svg).select('text.detail')
+									.text(d[yprop])
+									.transition()
+									.duration(300)
+									.attr('x', xScale(d[xprop]))
+									.attr('y', yScale(d[yprop]) - padding / 2)
+									.style('opacity', 1)
+									;
+							})
+							.on('mouseout', function(d, i) {
+								var $this = d3.select(this);
+								$this.attr('fill', '#888');
+								d3.select(svg).select('text.detail')
+									.transition()
+									.duration(300)
+									.style('opacity', 0)
+									;	
+							})
+							;
+
+					d3.select(svg)
+						.append('svg:text')
+						.attr('class', 'detail')
+						.attr('x', padding)
+						.attr('y', padding)
+						.attr('stroke', '#FFF')
 						;
 
 					console.log(data);
