@@ -12,6 +12,46 @@ var BADGE_MAP = {
   10: ["Hat Trick", "hat_trick.png"],
   11: ["Last-Second Win", "last_second_win.png"]
 };
+
+var PROPERTY_MAP = {
+	frags: [
+		{name: 'kill_count'},
+		{name: 'death_count'},
+		{name: 'suicide_count'},
+		{name: 'kill_death_ratio'},
+		{name: 'spread'},
+		{name: 'spread_per_game'}
+		// Spread:     <span class="stat">{{player.kill_count - player.death_count}}</span><br/>
+		// Spread/game:<span class="stat">{{(player.kill_count - player.death_count) / player.game_count | number:2}}</span><br/>
+	],
+	flags: [
+		{name: 'flag_pickups'},
+		{name: 'flag_drops'},
+		{name: 'flag_returns'},
+		{name: 'flag_scores'},
+		{name: 'flag_scores_per_game'}
+	],
+	games: [
+		{name: 'game_count'},
+		{name: 'win_count'},
+		{name: 'lose_count'},
+		{name: 'tie_count'},
+		{name: 'points'},
+		{name: 'points_per_game'},
+	],
+	misc: [
+		{name: 'asteroid_kills'},
+		{name: 'asteroid_crashes'},
+		{name: 'ff_kills'},
+		{name: 'ffs_engineered'},
+		{name: 'turret_kills'},
+		{name: 'turrets_engineered'},
+		{name: 'teleports_engineered'},
+		{name: 'distance_traveled'},
+		{name: 'teleport_uses'},
+		{name: 'last_update'},
+	]
+};
  
 angular.module('bfstats.controllers', ['ngGrid'])
 	.controller('StatsCtrl', function ($scope, $http) {
@@ -33,12 +73,17 @@ angular.module('bfstats.controllers', ['ngGrid'])
 			$http.get('stats.php', { params: params})
 			.success(function(data) {
 				$scope.total = data.count;
-				$scope.stats = data;
 
 				for(i in data) {
 					row = data[i];
 					row.last_played = moment(row.last_played + " GMT+0100").fromNow();
+					row.flag_scores_per_game = row.flag_scores / row.game_count;
+					row.spread = row.kill_count - row.death_count;
+					row.spread_per_game = (row.kill_count - row.death_count) / row.game_count;
+					row.points_per_game = row.points / row.game_count;
 				}
+
+				$scope.stats = data;
 			})
 			.error(function(data, status, headers, config) {
 				console.log(status);
@@ -66,6 +111,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
 			.success(function(data) {
 				var i;
 				var achievement;
+				var row;
 
 				console.log(data);
 
@@ -76,14 +122,21 @@ angular.module('bfstats.controllers', ['ngGrid'])
 					}
 				}
 
+				// Clean up the data once we receive it
 				data.game_count = data.win_count + data.lose_count + data.tie_count + data.dnf_count;
 				data.finished_game_count = data.win_count + data.lose_count + data.tie_count;
+				data.last_played = moment(data.last_played + " GMT+0100").fromNow();
+				data.flag_scores_per_game = data.flag_scores / data.game_count;
+				data.spread = data.kill_count - data.death_count;
+				data.spread_per_game = (data.kill_count - data.death_count) / data.game_count;
+				data.points_per_game = data.points / data.game_count;
 
 				for(i in data.achievements) {
 					achievement = data.achievements[i];
 					achievement.hint = BADGE_MAP[achievement.achievement_id][0];
 					achievement.image = BADGE_MAP[achievement.achievement_id][1];
 				}
+
 				$scope.player = data;
 			})
 			.error(function(data, status, headers, config) {
@@ -93,6 +146,8 @@ angular.module('bfstats.controllers', ['ngGrid'])
 				$scope.playerStatsLoading = false;
 			});
 		}
+
+		$scope.propertyMap = PROPERTY_MAP;
 
 		$scope.loadingStyle = 'loading';
 
