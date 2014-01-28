@@ -84,29 +84,33 @@ angular.module('bfstats.directives', [])
 							.call(yAxis)
 						;
 
-					d3.select(element[0]).select('svg')
+					var line = d3.svg.area()
+						.x(function(d) {
+							console.log(d);
+							return xScale(d.x) + padding + w / data.length / 2;
+						})
+						.y(function(d) {
+							return h - yScale(d.players_per_game);
+						})
+						.interpolate('basis')
+						;
+
+					var svg = element.find('svg')[0];
+
+					d3.select(svg)
 						.attr('width', w + 2*padding)
 						.attr('height', h + padding)
 						.style('background', '#000')
 						.style('margin', 'auto')
 						.style('display', 'block')
-					.selectAll('rect')
-						.data(data)
-						.enter()
-						.append('rect')
-						.attr('fill', '#EEE')
-						.attr('x', function(d) {
-							return xScale(d.x) + padding + w / data.length / 2;
-						})
-						.attr('y', function(d) {
-							return h - yScale(d.players_per_game);
-						})
-						.attr('width', Math.max(1, w / data.length - 3))
-						.attr('height', function(d) {
-							return yScale(d.players_per_game);
-						})
+						.append('path')
+							.attr('d', line(data))
+							.attr('stroke', '#FFF')
+							.attr('fill', '#FFF')
 						;
-					console.log(data);
+
+					console.log(d3.select(element[0]).select('svg g'));
+
 				});
 			}
 		};
