@@ -116,6 +116,4 @@ while($row = mysqli_fetch_assoc($result)) {
   array_push($all, $row);
 }
 
-$all['count'] = $count;
-
 echo json_encode($all);

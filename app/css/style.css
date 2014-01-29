@@ -84,6 +84,13 @@ h4 {
   margin: .5em 0;
 }
 
+.rank {
+  float: right;
+  text-align: right;
+  width: 3em;
+  margin-right: .25em;
+}
+
 .stat {
   float: right;
   color: #EEE;

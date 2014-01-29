@@ -1,7 +1,7 @@
 <select class="period" ng-model="selectedPeriod" ng-options="period.pretty for period in periods">
 </select>
-<div class="stats" ng-if="stats && stats.count > 0" ng-grid="options"></div>
-<div class="no-stats" ng-if="stats && stats.count === 0">No stats found for {{selectedPeriod.pretty}}</div>
+<div class="stats" ng-if="stats && stats.length > 0" ng-grid="options"></div>
+<div class="no-stats" ng-if="stats && stats.length === 0">No stats found for {{selectedPeriod.pretty}}</div>
 <noscript ng-if="!stats">
 	A modern, JavaScript-enabled browser is required to use this page.
 </noscript>
@@ -20,7 +20,10 @@
 		<div class="col-xs-12 col-md-4" ng-repeat="(group, propertyDefs) in propertyMap" id="{{group}}">
 			<h4>{{group}}</h4>
 			<div ng-repeat="property in propertyDefs">
-			{{property.name}} <span style="float: right" bf-rank="property.name"></span><span class="stat">{{player[property.name]}}</span>
+			{{property.name}}
+			<span style="float: right" bf-rank="property.name"></span>
+			<span class="rank">(#{{rank}})</span>
+			<span class="stat">{{player[property.name]}}</span>
 			</div>
 		</div>
 		<div class="col-xs-12 col-md-4" id="weapons">

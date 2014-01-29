@@ -72,10 +72,20 @@ angular.module('bfstats.controllers', ['ngGrid'])
 
 			$http.get('stats.php', { params: params})
 			.success(function(data) {
-				$scope.total = data.count;
+				var i;
+				var j;
 
-				for(i in data) {
+				// convert integer strings to actual integers
+				for(i = 0; i < data.length; i++) {
+					for(j in data[i]) {
+						if((+data[i][j]).toString() === data[i][j]) {
+							data[i][j] = +data[i][j];
+						}
+					}
+
 					row = data[i];
+					row.game_count = row.win_count + row.lose_count + row.tie_count;
+					row.finished_game_count = row.win_count + row.lose_count + row.tie_count;
 					row.last_played = moment(row.last_played + " GMT+0100").fromNow();
 					row.flag_scores_per_game = row.flag_scores / row.game_count;
 					row.spread = row.kill_count - row.death_count;
@@ -98,8 +108,10 @@ angular.module('bfstats.controllers', ['ngGrid'])
 				month: $scope.selectedPeriod.month + 1,
 				year: $scope.selectedPeriod.year,
 				player: $scope.selectedPlayer.player_name,
-				authed: $scope.selectedPlayer.is_authenticated === '1' ? 'yes' : 'no'
+				authed: $scope.selectedPlayer.is_authenticated == '1' ? 'yes' : 'no'
 			};
+
+			console.log(params);
 
 			if($scope.playerStatsLoading) {
 				return;
@@ -112,8 +124,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
 				var i;
 				var achievement;
 				var row;
-
-				console.log(data);
 
 				// convert integer strings to actual integers
 				for(i in data) {
@@ -138,6 +148,8 @@ angular.module('bfstats.controllers', ['ngGrid'])
 				}
 
 				$scope.player = data;
+
+				console.log(data);
 			})
 			.error(function(data, status, headers, config) {
 				console.log(status);

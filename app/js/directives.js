@@ -199,12 +199,13 @@ angular.module('bfstats.directives', [])
 	.directive('bfRank', function() {
 		return {
 			template: '<svg></svg>',
+			transclude: true,
 			link: function(scope, element, attributes) {
 				var prop = scope.$eval(attributes['bfRank']);
 				var stats = scope.$eval('stats');
-				var w = 50;
+				var w = 100;
 				var h = 15;
-				var buckets = 10;
+				var buckets = 30;
 				var svg = d3.select(element[0]).select('svg');
 				var data = [];
 				var k;
@@ -216,7 +217,8 @@ angular.module('bfstats.directives', [])
 				var bucketWidth;
 				var playerBucket;
 				var playerData;
-				var outlierFactor = .10;
+				var playerRank;
+				var outlierFactor = .00;
 
 				for(k in stats) {
 					data.push(stats[k]);
@@ -226,13 +228,13 @@ angular.module('bfstats.directives', [])
 					return parseFloat(d[prop]);
 				};
 
-				values = data.map(accessor);
-				values = values.sort(d3.ascending);
-				leftValue = d3.quantile(values, outlierFactor);
-				leftIndex = d3.bisectLeft(values, leftValue);
-				rightValue = d3.quantile(values, 1.0 - outlierFactor);
-				rightIndex = d3.bisectRight(values, rightValue);
-				// data = data.slice(leftIndex, rightIndex+1);
+				// values = data.map(accessor);
+				// values = values.sort(d3.ascending);
+				// leftValue = d3.quantile(values, outlierFactor);
+				// leftIndex = d3.bisectLeft(values, leftValue);
+				// rightValue = d3.quantile(values, 1.0 - outlierFactor);
+				// rightIndex = d3.bisectRight(values, rightValue);
+				// data = data.slice(leftIndex, rightIndex);
 
 				xScale = d3.scale.linear()
 					.domain([0, buckets])
@@ -250,7 +252,7 @@ angular.module('bfstats.directives', [])
 					.value(function(d) {
 						return d[prop];
 					})
-					.range([leftValue, rightValue])
+					.range(yExtent)
 					.bins(buckets)
 					;
 				histData = hist(data);
@@ -292,12 +294,25 @@ angular.module('bfstats.directives', [])
 					;
 
 				scope.$watchCollection('player', function(newVal) {
+					// find bucket
 					for(i = 0; i < histData.length; i++) {
 						playerBucket = i;
-						if(histData[i].x >= newVal[prop]) {
+						if(histData[i].x >= parseFloat(newVal[prop])) {
 							break;
 						}
 					}
+
+					// find rank
+					data = data.sort(function(a,b) {
+						return (+a[prop]) - (+b[prop]);
+					});
+					for(i = data.length-1; i >= 0; i--) {
+						playerRank = data.length - i;
+						if(accessor(data[i]) <= accessor(newVal)) {
+							break;
+						}
+					}
+					scope.rank = playerRank;
 
 					svg.selectAll('rect')
 						.attr('fill', function(d, i) {
