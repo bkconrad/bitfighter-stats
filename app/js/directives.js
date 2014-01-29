@@ -219,6 +219,7 @@ angular.module('bfstats.directives', [])
 				var playerData;
 				var playerRank;
 				var outlierFactor = .00;
+				var barBaseSize = 2;
 
 				for(k in stats) {
 					data.push(stats[k]);
@@ -264,7 +265,7 @@ angular.module('bfstats.directives', [])
 
 				yScale = d3.scale.linear()
 					.domain([0, binMax])
-					.range([h - 5, 0])
+					.range([h - barBaseSize, 0])
 					;
 
 				yAxis = d3.svg.axis()
@@ -289,7 +290,7 @@ angular.module('bfstats.directives', [])
 						return Math.floor(bucketWidth - 2);
 					})
 					.attr('height', function(d, i) {
-						return Math.ceil(h - Math.floor(yScale(d.y))) + 5;
+						return Math.ceil(h - Math.floor(yScale(d.y))) + barBaseSize;
 					})
 					;
 
