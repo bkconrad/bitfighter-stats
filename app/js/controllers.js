@@ -117,8 +117,8 @@ angular.module('bfstats.controllers', ['ngGrid'])
 
 				// convert integer strings to actual integers
 				for(i in data) {
-					if(parseInt(data[i], 10).toString() === data[i]) {
-						data[i] = parseInt(data[i], 10);
+					if((+data[i]).toString() === data[i]) {
+						data[i] = +data[i];
 					}
 				}
 

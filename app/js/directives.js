@@ -202,17 +202,37 @@ angular.module('bfstats.directives', [])
 			link: function(scope, element, attributes) {
 				var prop = scope.$eval(attributes['bfRank']);
 				var stats = scope.$eval('stats');
-				var w = 150;
+				var w = 50;
 				var h = 15;
-				var buckets = 100;
+				var buckets = 10;
 				var svg = d3.select(element[0]).select('svg');
 				var data = [];
 				var k;
 				var xScale, yScale, xAxis, yAxis, hist, histData, binMax;
+				var bisector;
+				var leftValue, leftIndex;
+				var rightValue, rightIndex;
+				var values = [];
+				var bucketWidth;
+				var playerBucket;
+				var playerData;
+				var outlierFactor = .10;
 
 				for(k in stats) {
 					data.push(stats[k]);
 				}
+
+				var accessor = function(d) {
+					return parseFloat(d[prop]);
+				};
+
+				values = data.map(accessor);
+				values = values.sort(d3.ascending);
+				leftValue = d3.quantile(values, outlierFactor);
+				leftIndex = d3.bisectLeft(values, leftValue);
+				rightValue = d3.quantile(values, 1.0 - outlierFactor);
+				rightIndex = d3.bisectRight(values, rightValue);
+				// data = data.slice(leftIndex, rightIndex+1);
 
 				xScale = d3.scale.linear()
 					.domain([0, buckets])
@@ -225,15 +245,16 @@ angular.module('bfstats.directives', [])
 					.orient('bottom')
 					;
 
-				yExtent = d3.extent(data, function(d) { return parseFloat(d[prop]); });
+				yExtent = d3.extent(data, accessor);
 				hist = d3.layout.histogram()
 					.value(function(d) {
-						return d[prop] > 0 ? d[prop] : null;
+						return d[prop];
 					})
-					.range(yExtent)
+					.range([leftValue, rightValue])
 					.bins(buckets)
 					;
 				histData = hist(data);
+
 
 				binMax = d3.max(histData, function(d) {
 					return d.y;
@@ -241,7 +262,7 @@ angular.module('bfstats.directives', [])
 
 				yScale = d3.scale.linear()
 					.domain([0, binMax])
-					.range([h, 0])
+					.range([h - 5, 0])
 					;
 
 				yAxis = d3.svg.axis()
@@ -252,23 +273,38 @@ angular.module('bfstats.directives', [])
 				svg.attr('width', w);
 				svg.attr('height', h);
 
+				bucketWidth = Math.round(w / buckets);
 				svg.selectAll('rect')
 					.data(histData)
 				.enter().append('svg:rect')
-					.attr('fill', '#FFF')
 					.attr('x', function(d, i) {
-						return w / buckets * i;
+						return Math.floor(bucketWidth * i);
 					})
 					.attr('y', function(d, i) {
-						return yScale(d.y);
+						return Math.floor(yScale(d.y));
 					})
 					.attr('width', function(d, i) {
-						return w / buckets - 1;
+						return Math.floor(bucketWidth - 2);
 					})
 					.attr('height', function(d, i) {
-						return h - yScale(d.y);
+						return Math.ceil(h - Math.floor(yScale(d.y))) + 5;
 					})
 					;
+
+				scope.$watchCollection('player', function(newVal) {
+					for(i = 0; i < histData.length; i++) {
+						playerBucket = i;
+						if(histData[i].x >= newVal[prop]) {
+							break;
+						}
+					}
+
+					svg.selectAll('rect')
+						.attr('fill', function(d, i) {
+							return i == playerBucket ? '#CCC' : '#444';
+						})	
+						;
+				})
 			}
 		};
 	})

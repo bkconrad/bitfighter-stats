@@ -12,6 +12,7 @@
 	<h1 class="auth"> {{player.player_name}} </h1>
 
 	<div id="badges">
+		&nbsp;
 		<span class="achievement" ng-if="player.achievements" ng-repeat="achievement in player.achievements"><img title="{{achievement.hint}}" src="badges/{{achievement.image}}"></img></span>
 	</div>
 
@@ -19,7 +20,7 @@
 		<div class="col-xs-12 col-md-4" ng-repeat="(group, propertyDefs) in propertyMap" id="{{group}}">
 			<h4>{{group}}</h4>
 			<div ng-repeat="property in propertyDefs">
-			{{property.name}} <span class="stat">{{player[property.name]}}</span><span bf-rank="property.name"></span>
+			{{property.name}} <span style="float: right" bf-rank="property.name"></span><span class="stat">{{player[property.name]}}</span>
 			</div>
 		</div>
 		<div class="col-xs-12 col-md-4" id="weapons">
