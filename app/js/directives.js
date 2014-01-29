@@ -214,11 +214,13 @@ angular.module('bfstats.directives', [])
 				var leftValue, leftIndex;
 				var rightValue, rightIndex;
 				var values = [];
+				var mean;
+				var stdDev;
 				var bucketWidth;
 				var playerBucket;
 				var playerData;
 				var playerRank;
-				var outlierFactor = .00;
+				var outlierFactor = .15;
 				var barBaseSize = 2;
 
 				for(k in stats) {
@@ -229,12 +231,18 @@ angular.module('bfstats.directives', [])
 					return parseFloat(d[prop]);
 				};
 
-				// values = data.map(accessor);
-				// values = values.sort(d3.ascending);
-				// leftValue = d3.quantile(values, outlierFactor);
-				// leftIndex = d3.bisectLeft(values, leftValue);
-				// rightValue = d3.quantile(values, 1.0 - outlierFactor);
-				// rightIndex = d3.bisectRight(values, rightValue);
+				yExtent = d3.extent(data, accessor);
+
+				values = data.map(accessor);
+				mean = d3.mean(values);
+				stdDev = 3*d3.mean(values.map(function(d) {
+					return Math.abs(d - mean);
+				}));
+				values = values.sort(d3.ascending);
+				leftValue = Math.max(yExtent[0], mean - stdDev);
+				leftIndex = d3.bisectLeft(values, leftValue);
+				rightValue = Math.min(yExtent[1], mean + stdDev);
+				rightIndex = d3.bisectRight(values, rightValue);
 				// data = data.slice(leftIndex, rightIndex);
 
 				xScale = d3.scale.linear()
@@ -248,12 +256,12 @@ angular.module('bfstats.directives', [])
 					.orient('bottom')
 					;
 
-				yExtent = d3.extent(data, accessor);
 				hist = d3.layout.histogram()
 					.value(function(d) {
 						return d[prop];
 					})
-					.range(yExtent)
+					// .range(yExtent)
+					.range([leftValue, rightValue])
 					.bins(buckets)
 					;
 				histData = hist(data);
