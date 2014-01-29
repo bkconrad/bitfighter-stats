@@ -23,7 +23,7 @@
 			{{property.name}}
 			<span style="float: right" bf-rank="property.name"></span>
 			<span class="rank">(#{{rank}})</span>
-			<span class="stat">{{player[property.name]}}</span>
+			<span class="stat">{{player[property.name] | stat}}</span>
 			</div>
 		</div>
 		<div class="col-xs-12 col-md-8" id="weapons">
