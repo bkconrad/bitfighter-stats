@@ -77,13 +77,6 @@ h4 {
   background: rgba(0, 0, 0, .85);
 }
 
-.period {
-  border: 1px solid #EEE;
-  background: #DDD;
-  color: #222;
-  margin: .5em 0;
-}
-
 .rank {
   float: right;
   text-align: right;
@@ -106,6 +99,32 @@ h4 {
 
 .badges {
   height: 30px;
+}
+
+.record {
+  margin-bottom: 1em;
+}
+
+.record-name {
+  color: #CCC;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.record .place {
+  margin-left: .5em;
+}
+
+.record .period {
+  display: inline-block;
+  float: right;
+  width: 5em;
+  text-align: right;
+}
+
+.record .value {
+  float: right;
+  margin-right: .25em;
 }
 
 .loading {
