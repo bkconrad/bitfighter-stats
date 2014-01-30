@@ -31,7 +31,6 @@ $main_fields = array(
     "teleports_engineered",
     "distance_traveled",
     "switched_team_count",
-    "last_played",
     "phaser_shots",
     "bouncer_shots",
     "triple_shots",
