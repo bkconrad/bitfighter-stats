@@ -241,4 +241,14 @@ angular.module('bfstats.controllers', ['ngGrid'])
 				console.log(data);
 			});
 	})
+
+	.controller('RecordsCtrl', function ($scope, $http) {
+		$http.get('records.php')
+			.success(function(data) {
+				$scope.records = data;
+			})
+			.error(function(data, status, headers, config) {
+				console.log(data);
+			});
+	})
 	;

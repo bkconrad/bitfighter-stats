@@ -6,6 +6,7 @@ angular.module('bfstats', [
   'bfstats.controllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
+  $routeProvider.when('/records', {templateUrl: 'app/partials/records.html', controller: 'RecordsCtrl'});
   $routeProvider.when('/games', {templateUrl: 'app/partials/games.html', controller: 'GamesCtrl'});
   $routeProvider.otherwise({templateUrl: 'app/partials/stats.html', controller: 'StatsCtrl'});
   // $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'MyCtrl2'});
