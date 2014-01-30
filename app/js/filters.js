@@ -22,4 +22,9 @@ angular.module('bfstats.filters', [])
 			return output;
 		};
 	})
+	.filter('monthYear', function() {
+		return function(input) {
+			return moment(input).format('MMM YYYY');
+		};
+	})
 	;

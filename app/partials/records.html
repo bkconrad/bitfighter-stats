@@ -2,7 +2,7 @@
 	{{recordName}}
 	<div ng-repeat="place in record">
 		{{place.player_name}}
-		{{place.period}}
+		{{place.period | monthYear}}
 		{{place.value}}
 	</div>
 </div>
