@@ -1,8 +1,8 @@
 <div class="record" ng-repeat="(recordName, record) in records">
 	{{recordName}}
-	<div ng-repeat="place in record">
-		{{place.player_name}}
-		{{place.period | monthYear}}
-		{{place.value}}
+	<div class="place" ng-repeat="place in record">
+		<span class="player_name">{{place.player_name}}</span>
+		<span class="period">{{place.period | monthYear}}</span>
+		<span class="value">{{place.value}}</span>
 	</div>
 </div>
