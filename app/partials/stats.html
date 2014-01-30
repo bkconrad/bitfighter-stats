@@ -20,7 +20,7 @@
 		<div class="col-xs-12 col-md-4" ng-repeat="(group, propertyDefs) in propertyMap" id="{{group}}">
 			<h4>{{group}}</h4>
 			<div ng-repeat="property in propertyDefs">
-			{{property.name}}
+			{{property.name | statName}}
 			<span style="float: right" bf-rank="property.name"></span>
 			<span class="rank">#{{rank}}</span>
 			<span class="stat">{{player[property.name] | stat}}</span>
