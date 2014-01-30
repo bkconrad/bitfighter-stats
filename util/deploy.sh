@@ -12,6 +12,7 @@ index.html
 db_functions.php.changeme
 stats.php
 player.php
+records.php
 players_per_game.php
 EOF
 )
