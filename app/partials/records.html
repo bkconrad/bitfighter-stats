@@ -1,10 +1,12 @@
 <div class="row">
-	<div class="record col-xs-12 col-sm-6 col-md-3" ng-repeat="(recordName, record) in records">
+	<div class="record col-xs-12 col-sm-6 col-md-4" ng-repeat="(recordName, record) in records">
 		<div class="record-name">{{recordName | statName}}</div>
-		<div class="place" ng-repeat="place in record">
+		<ol>
+		<li class="place" ng-repeat="place in record">
 			<span class="player_name">{{place.player_name}}&nbsp;</span>
 			<span class="period">{{place.period | monthYear}}</span>
 			<span class="value stat">{{place.value | stat}}</span>
-		</div>
+		</li>
+		</ol>
 	</div>
 </div>
