@@ -351,8 +351,8 @@ angular.module('bfstats.directives', [])
 
 				// The domain is the first week of 0AD
 				var domain = [
-					moment().isoWeekday(1).hour(0),
-					moment().isoWeekday(7).hour(23)
+					moment([1, 0, '+0300'].join(' '), 'E H ZZ'),
+					moment([7, 23, '+0300'].join(' '), 'E H ZZ')
 				];
 
 				xScale = d3.time.scale()
@@ -402,7 +402,8 @@ angular.module('bfstats.directives', [])
 						.data(data)
 					.enter().append('svg:rect')
 						.attr('x', function(d, i) {
-							var dataMoment = moment().isoWeekday(d.day).hour(d.hour);
+							var dataMoment = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ');
+							console.log(dataMoment.toString());
 							return Math.floor(xScale(dataMoment.toDate()));
 						})
 						.attr('y', h)
@@ -415,9 +416,9 @@ angular.module('bfstats.directives', [])
 							var mousePos = d3.mouse(svg.node());
 							var textBBox;
 							var detailRectPadding = 3;
-							var text = moment().isoWeekday(d.day).hour(d.hour).format('ddd HH')
+							var text = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ').format('ddd hh A ZZ');
 							svg.select('text.detail')
-								.text(text)
+								.text(d.count + " - " + text)
 								;	
 							textBBox = svg.select('text.detail')
 								.node().getBBox();
