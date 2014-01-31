@@ -405,15 +405,11 @@ angular.module('bfstats.directives', [])
 							var dataMoment = moment().isoWeekday(d.day).hour(d.hour);
 							return Math.floor(xScale(dataMoment.toDate()));
 						})
-						.attr('y', function(d, i) {
-							return Math.floor(yScale(accessor(d)));
-						})
+						.attr('y', h)
 						.attr('width', function(d, i) {
 							return Math.floor(w/7/24);
 						})
-						.attr('height', function(d, i) {
-							return h - Math.floor(yScale(accessor(d)));
-						})
+						.attr('height', 0)
 						.attr('fill', '#FFF')
 						.on('mouseover', function(d) {
 							var mousePos = d3.mouse(svg.node());
@@ -462,12 +458,24 @@ angular.module('bfstats.directives', [])
 								.attr('fill', '#FFF')
 								;
 						})
+						.transition()
+						.duration(500)
+						.delay(function(d, i) {
+							return (+d.day * 24 + (+d.hour)) * 20;
+						})
+						.attr('y', function(d, i) {
+							return Math.floor(yScale(accessor(d)));
+						})
+						.attr('height', function(d, i) {
+							return h - Math.floor(yScale(accessor(d)));
+						})
 						;
 
 					svg.select('g.detail').remove();
 
 					svg.append('g')
 						.attr('class', 'detail')
+						.style('opacity', 0)
 						.append('rect')
 							.attr('fill', '#222')
 							.attr('stroke', '#111')
