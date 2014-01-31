@@ -418,12 +418,29 @@ angular.module('bfstats.directives', [])
 						.attr('fill', '#FFF')
 						.on('mouseover', function(d) {
 							var mousePos = d3.mouse(svg.node());
+							var textBBox;
+							var detailRectPadding = 3;
+							var text = moment().isoWeekday(d.day).hour(d.hour).format('ddd HH')
 							svg.select('text.detail')
-								.text(d.day + ' ' + d.hour)
+								.text(text)
+								;	
+							textBBox = svg.select('text.detail')
+								.node().getBBox();
+
+							svg.select('g.detail rect')
+								.interrupt()
+								.transition()
+								.attr('width', textBBox.width + detailRectPadding * 2)
+								.attr('height', textBBox.height + detailRectPadding * 2)
+								.attr('x', -detailRectPadding)
+								.attr('y', -textBBox.height - detailRectPadding)
+								;
+
+							svg.select('g.detail')
+								.interrupt()
 								.transition()
 								.duration(300)
-								.attr('x', mousePos[0])
-								.attr('y', mousePos[1] - padding)
+								.attr('transform', 'translate(' + mousePos[0] + ',' + (mousePos[1] - padding) + ')')
 								.style('opacity', 1)
 								;
 
@@ -434,7 +451,7 @@ angular.module('bfstats.directives', [])
 								;
 						})
 						.on('mouseout', function(d) {
-							svg.select('text.detail')
+							svg.select('g.detail')
 								.transition()
 								.duration(300)
 								.style('opacity', 0)
@@ -452,13 +469,18 @@ angular.module('bfstats.directives', [])
 
 					svg.append('g')
 						.attr('class', 'detail')
+						.append('rect')
+							.attr('fill', '#222')
+							.attr('stroke', '#111')
+							.attr('height', 30)
+							.attr('width', 60)
+							.attr('y', .5 * -padding)
+						;
+
+					svg.select('g.detail')
 						.append('text')
-						.attr('class', 'detail')
-						.style('opacity', 0)
-						.style('position', 'relative')
-						.style('z-index', '10000')
-						.style('background', '#000')
-						.attr('fill', '#888')
+							.attr('class', 'detail')
+							.attr('fill', '#888')
 						;
 				})
 			}
