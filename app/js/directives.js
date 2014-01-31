@@ -19,15 +19,13 @@ angular.module('bfstats.directives', [])
             var options = scope.$eval(attributes.bfGraph);
 
             scope.$watch(options.data, function (newVal) {
-                /* Sizing and scales. */
                 var w = 300 * 1.618;
                 var h = 300;
                 var data = [];
+                var k;
+                var padding = 30;
                 var xprop = options.x;
                 var yprop = options.y;
-                var k;
-                // var COLORS = ['#80100F', '#4c1348', '#142030', '#476f26'];
-                var padding = 30;
 
                 // bail if the value is falsey
                 if (!newVal) {
@@ -44,9 +42,11 @@ angular.module('bfstats.directives', [])
                     }
                 }
 
+                // build an x scale and axis from 0 to the max x value
                 var xMax = d3.max(data, function (d) {
                     return d[xprop];
                 });
+
                 var xScale = d3.scale.linear()
                     .domain([0, xMax])
                     .range([padding, w])
@@ -56,6 +56,14 @@ angular.module('bfstats.directives', [])
                     .scale(xScale)
                     .orient('bottom');
 
+                // draw x axis
+                d3.select(element[0]).select('svg')
+                    .append('g')
+                    .attr('stroke', '#EEE')
+                    .attr('transform', 'translate(0,' + h + ')')
+                    .call(xAxis);
+
+                // build a y scale from 0 to the max y value plus some head room
                 var yMax = d3.max(data, function (d) {
                     return parseFloat(d[yprop]);
                 });
@@ -68,18 +76,14 @@ angular.module('bfstats.directives', [])
                     .scale(yScale)
                     .orient('left');
 
-                d3.select(element[0]).select('svg')
-                    .append('g')
-                    .attr('stroke', '#EEE')
-                    .attr('transform', 'translate(0,' + h + ')')
-                    .call(xAxis);
-
+                // draw y axis
                 d3.select(element[0]).select('svg')
                     .append('g')
                     .attr('stroke', '#EEE')
                     .attr('transform', 'translate(' + padding + ',0)')
                     .call(yAxis);
 
+                // create line generator
                 var line = d3.svg.line()
                     .x(function (d) {
                         return xScale(d[xprop]);
@@ -88,6 +92,7 @@ angular.module('bfstats.directives', [])
                         return yScale(d[yprop]);
                     });
 
+                // shorthand svg variable
                 var svg = element.find('svg')[0];
 
                 // Add a backdrop to trigger the mousemove event
@@ -118,6 +123,8 @@ angular.module('bfstats.directives', [])
                 d3.select(svg)
                     .on('mousemove', function () {
 
+                        var BOX_PADDING = 3;
+
                         // Find the datum with the closest x-distance
                         var x = Math.round(xScale.invert(d3.mouse(svg)[0]));
                         var datum = data[x];
@@ -132,11 +139,11 @@ angular.module('bfstats.directives', [])
                             .attr('y', yScale(datum[yprop]))
                             .text(datum[yprop]);
 
+                        // get text height
                         var bbox = d3.select(svg).select('text.detail').node().getBBox();
                         var textWidth = bbox.width;
                         var textHeight = bbox.height;
 
-                        var BOX_PADDING = 3;
                         // Move the detail box to the closest data point
                         d3.select(svg).select('rect.detail')
                             .transition()
@@ -174,9 +181,6 @@ angular.module('bfstats.directives', [])
                     .attr('y', padding)
                     .attr('stroke', '#FFF')
                     .style('vertical-align', 'middle');
-
-                console.log(data);
-
             });
         }
     };
