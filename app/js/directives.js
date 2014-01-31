@@ -330,7 +330,7 @@ angular.module('bfstats.directives', [])
 			link: function(scope, element, attributes) {
 				var times = scope.$eval(attributes['bfGameTimes']);
 				var data = [];
-				var w = 672;
+				var w = 24*7*6 - 5;
 				var h = 150;
 				var padding = 30;
 				var svg = d3.select(element[0]).select('svg');
@@ -409,10 +409,9 @@ angular.module('bfstats.directives', [])
 							return Math.floor(yScale(accessor(d)));
 						})
 						.attr('width', function(d, i) {
-							return Math.floor(w/7/24) - 2;
+							return Math.floor(w/7/24);
 						})
 						.attr('height', function(d, i) {
-							console.log(d, yScale(accessor(d)));
 							return h - Math.floor(yScale(accessor(d)));
 						})
 						.attr('fill', '#FFF')
