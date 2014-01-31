@@ -16,20 +16,17 @@ angular.module('bfstats.directives', [])
     return {
         template: '<svg></svg>',
         link: function (scope, element, attributes) {
-            var options = scope.$eval(attributes['bfGraph']);
+            var options = scope.$eval(attributes.bfGraph);
 
-            scope.$watch(options.data, function (newVal, oldVal, scope) {
+            scope.$watch(options.data, function (newVal) {
                 /* Sizing and scales. */
                 var w = 300 * 1.618;
                 var h = 300;
                 var data = [];
-                var x;
-                var y;
                 var xprop = options.x;
                 var yprop = options.y;
                 var k;
-                var k2;
-                var COLORS = ['#80100F', '#4c1348', '#142030', '#476f26'];
+                // var COLORS = ['#80100F', '#4c1348', '#142030', '#476f26'];
                 var padding = 30;
 
                 // bail if the value is falsey
@@ -62,7 +59,7 @@ angular.module('bfstats.directives', [])
                 var yMax = d3.max(data, function (d) {
                     return parseFloat(d[yprop]);
                 });
-                console.log(yMax);
+
                 var yScale = d3.scale.linear()
                     .domain([0, yMax * 1.1])
                     .range([h, 0]);
@@ -74,7 +71,7 @@ angular.module('bfstats.directives', [])
                 d3.select(element[0]).select('svg')
                     .append('g')
                     .attr('stroke', '#EEE')
-                    .attr('transform', 'translate(0,' + (h) + ')')
+                    .attr('transform', 'translate(0,' + h + ')')
                     .call(xAxis);
 
                 d3.select(element[0]).select('svg')
@@ -123,7 +120,6 @@ angular.module('bfstats.directives', [])
 
                         // Find the datum with the closest x-distance
                         var x = Math.round(xScale.invert(d3.mouse(svg)[0]));
-                        console.log(x);
                         var datum = data[x];
 
                         // Move the detail text to the closest data point
@@ -190,30 +186,28 @@ angular.module('bfstats.directives', [])
             template: '<svg></svg>',
             transclude: true,
             link: function (scope, element, attributes) {
-                var prop = scope.$eval(attributes['bfRank']);
-                var stats = scope.$eval('stats');
-                var w = 100;
-                var h = 15;
-                var buckets = 30;
-                var svg = d3.select(element[0]).select('svg');
-                var data = [];
-                var k;
-                var xScale, yScale, xAxis, yAxis, hist, histData, binMax;
-                var bisector;
-                var leftValue, leftIndex;
-                var rightValue, rightIndex;
-                var values = [];
-                var mean;
-                var stdDev;
-                var bucketWidth;
-                var playerBucket;
-                var playerData;
-                var playerRank;
-                var outlierFactor = .15;
                 var barBaseSize = 3;
+                var binMax;
+                var bucketWidth;
+                var buckets = 30;
+                var data = [];
+                var h = 15;
+                var hist;
+                var histData;
+                var k;
+                var playerBucket;
+                var playerRank;
+                var prop = scope.$eval(attributes.bfRank);
+                var stats = scope.$eval('stats');
+                var svg = d3.select(element[0]).select('svg');
+                var w = 100;
+                var yExtent;
+                var yScale;
 
                 for (k in stats) {
-                    data.push(stats[k]);
+                    if (stats.hasOwnProperty(k)) {
+                        data.push(stats[k]);
+                    }
                 }
 
                 var accessor = function (d) {
@@ -221,16 +215,6 @@ angular.module('bfstats.directives', [])
                 };
 
                 yExtent = d3.extent(data, accessor);
-
-
-                xScale = d3.scale.linear()
-                    .domain([0, buckets])
-                    .range([0, w])
-                    .nice();
-
-                xAxis = d3.svg.axis()
-                    .scale(xScale)
-                    .orient('bottom');
 
                 hist = d3.layout.histogram()
                     .value(function (d) {
@@ -251,10 +235,6 @@ angular.module('bfstats.directives', [])
                     .range([h - barBaseSize, 0])
                     .clamp(true);
 
-                yAxis = d3.svg.axis()
-                    .scale(yScale)
-                    .orient('left');
-
                 svg.attr('width', w);
                 svg.attr('height', h);
 
@@ -265,17 +245,17 @@ angular.module('bfstats.directives', [])
                     .attr('x', function (d, i) {
                         return Math.floor(bucketWidth * i);
                     })
-                    .attr('y', function (d, i) {
+                    .attr('y', function (d) {
                         return Math.floor(yScale(d.y));
                     })
-                    .attr('width', function (d, i) {
-                        return Math.floor(bucketWidth - 2);
-                    })
-                    .attr('height', function (d, i) {
+                    .attr('width', Math.floor(bucketWidth - 2))
+                    .attr('height', function (d) {
                         return Math.ceil(h - Math.floor(yScale(d.y))) + barBaseSize;
                     });
 
                 scope.$watchCollection('player', function (newVal) {
+                    var i;
+
                     // find bucket
                     for (i = 0; i < histData.length; i++) {
                         playerBucket = i;
@@ -298,9 +278,9 @@ angular.module('bfstats.directives', [])
 
                     svg.selectAll('rect')
                         .attr('fill', function (d, i) {
-                            return i == playerBucket ? '#CCC' : '#444';
+                            return i === playerBucket ? '#CCC' : '#444';
                         });
-                })
+                });
             }
         };
     })
@@ -310,21 +290,21 @@ angular.module('bfstats.directives', [])
         template: '<svg></svg>',
         transclude: true,
         link: function (scope, element, attributes) {
-            var times = scope.$eval(attributes['bfGameTimes']);
+            var times = scope.$eval(attributes.bfGameTimes);
             var data = [];
             var w = 24 * 7 * 6 - 5;
             var h = 150;
             var padding = 30;
             var svg = d3.select(element[0]).select('svg');
             var k;
-            var xScale, yScale, xAxis, yAxis;
+            var xScale, yScale;
+            var xAxis;
             var yMax;
-            var dayWidth = w / 7;
-            var hourWidth = dayWidth / 24;
-            var xTickFormat;
 
             for (k in times) {
-                data.push(times[k]);
+                if (times.hasOwnProperty(k)) {
+                    data.push(times[k]);
+                }
             }
 
             var accessor = function (d) {
@@ -358,10 +338,13 @@ angular.module('bfstats.directives', [])
             .style('font-weight', 'normal')
                 .call(xAxis);
 
-            scope.$watchCollection(attributes['bfGameTimes'], function (newVal) {
-                var data = [];
-                for (k in newVal) {
-                    data.push(newVal[k]);
+            scope.$watchCollection(attributes.bfGameTimes, function (newVal) {
+                var k2;
+                data = [];
+                for (k2 in newVal) {
+                    if (newVal.hasOwnProperty(k2)) {
+                        data.push(newVal[k2]);
+                    }
                 }
 
                 // yscale can only be made after the data is available
@@ -371,26 +354,21 @@ angular.module('bfstats.directives', [])
                     .range([h, 0])
                     .clamp(true);
 
-                yAxis = d3.svg.axis()
-                    .scale(yScale)
-                    .orient('left');
-
                 svg.selectAll('rect')
                     .data(data)
                     .enter().append('svg:rect')
-                    .attr('x', function (d, i) {
+                    .attr('x', function (d) {
                         var dataMoment = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ');
                         console.log(dataMoment.toString());
                         return Math.floor(xScale(dataMoment.toDate()));
                     })
                     .attr('y', h)
-                    .attr('width', function (d, i) {
+                    .attr('width', function () {
                         return Math.floor(w / 7 / 24);
                     })
                     .attr('height', 0)
                     .attr('fill', '#FFF')
                     .on('mouseover', function (d) {
-                        var mousePos = d3.mouse(svg.node());
                         var textBBox;
                         var detailRectPadding = 3;
                         var text = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ').format('ddd h A');
@@ -405,7 +383,7 @@ angular.module('bfstats.directives', [])
                             .attr('stroke', '#111')
                             .attr('height', 30)
                             .attr('width', 60)
-                            .attr('y', .5 * -padding);
+                            .attr('y', 0.5 * -padding);
 
                         // show detail text
                         svg.select('g.detail')
@@ -447,7 +425,7 @@ angular.module('bfstats.directives', [])
                             .duration(100)
                             .attr('fill', '#AAA');
                     })
-                    .on('mouseout', function (d) {
+                    .on('mouseout', function () {
 
                         // remove old detail boxes
                         svg.select('g.detail')
@@ -461,17 +439,16 @@ angular.module('bfstats.directives', [])
                     })
                     .transition()
                     .duration(500)
-                    .delay(function (d, i) {
+                    .delay(function (d) {
                         return (+d.day * 24 + (+d.hour)) * 20;
                     })
-                    .attr('y', function (d, i) {
+                    .attr('y', function (d) {
                         return Math.floor(yScale(accessor(d)));
                     })
-                    .attr('height', function (d, i) {
+                    .attr('height', function (d) {
                         return h - Math.floor(yScale(accessor(d)));
                     });
-
-            })
+            });
         }
     };
 });

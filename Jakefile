@@ -56,6 +56,7 @@ task('lint', function () {
         plusplus: true,
         node: true,
         white: true,
+        unparam: true,
         predef: ['moment', 'angular', 'd3', 'it', 'describe', 'beforeEach']
     };
 
