@@ -322,4 +322,146 @@ angular.module('bfstats.directives', [])
 			}
 		};
 	})
+
+	.directive('bfGameTimes', function() {
+		return {
+			template: '<svg></svg>',
+			transclude: true,
+			link: function(scope, element, attributes) {
+				var times = scope.$eval(attributes['bfGameTimes']);
+				var data = [];
+				var w = 672;
+				var h = 150;
+				var padding = 30;
+				var svg = d3.select(element[0]).select('svg');
+				var k;
+				var xScale, yScale, xAxis, yAxis;
+				var yMax;
+				var dayWidth = w/7;
+				var hourWidth = dayWidth/24;
+				var xTickFormat;
+
+				for(k in times) {
+					data.push(times[k]);
+				}
+
+				var accessor = function(d) {
+					return parseFloat(d.count);
+				};
+
+				// The domain is the first week of 0AD
+				var domain = [
+					moment().isoWeekday(1).hour(0),
+					moment().isoWeekday(7).hour(23)
+				];
+
+				xScale = d3.time.scale()
+					.domain(domain)
+					.range([0, w])
+					;
+
+				// xTickFormat = xScale.tickFormat('%H');
+
+				xAxis = d3.svg.axis()
+					.scale(xScale)
+					.orient('bottom')
+					.ticks(d3.time.day, 1)
+					.tickFormat(d3.time.format('%A'))
+					;
+
+				svg.attr('width', w);
+				svg.attr('height', h + 2*padding);
+				svg.append('g')
+					.attr('stroke', '#FFF')
+					.attr('transform', 'translate(0,' + (h + 2) +')')
+					//.style('font-size', '7.5px')
+					.style('font-weight', 'normal')
+					.call(xAxis)
+					;
+
+				scope.$watchCollection(attributes['bfGameTimes'], function(newVal) {
+					var data = [];
+					for(k in newVal) {
+						data.push(newVal[k]);
+					}
+
+					// yscale can only be made after the data is available
+					yMax = d3.max(data, accessor);
+					yScale = d3.scale.linear()
+						.domain([0, yMax])
+						.range([h, 0])
+						.clamp(true)
+						;
+
+					yAxis = d3.svg.axis()
+						.scale(yScale)
+						.orient('left')
+						;
+
+					svg.selectAll('rect')
+						.data(data)
+					.enter().append('svg:rect')
+						.attr('x', function(d, i) {
+							var dataMoment = moment().isoWeekday(d.day).hour(d.hour);
+							return Math.floor(xScale(dataMoment.toDate()));
+						})
+						.attr('y', function(d, i) {
+							return Math.floor(yScale(accessor(d)));
+						})
+						.attr('width', function(d, i) {
+							return Math.floor(w/7/24) - 2;
+						})
+						.attr('height', function(d, i) {
+							console.log(d, yScale(accessor(d)));
+							return h - Math.floor(yScale(accessor(d)));
+						})
+						.attr('fill', '#FFF')
+						.on('mouseover', function(d) {
+							var mousePos = d3.mouse(svg.node());
+							svg.select('text.detail')
+								.text(d.day + ' ' + d.hour)
+								.transition()
+								.duration(300)
+								.attr('x', mousePos[0])
+								.attr('y', mousePos[1] - padding)
+								.style('opacity', 1)
+								;
+
+							d3.select(this)
+								.transition()
+								.duration(100)
+								.attr('fill', '#AAA')
+								;
+						})
+						.on('mouseout', function(d) {
+							svg.select('text.detail')
+								.transition()
+								.duration(300)
+								.style('opacity', 0)
+								;
+
+							d3.select(this)
+								.transition()
+								.duration(100)
+								.attr('fill', '#FFF')
+								;
+						})
+						;
+
+					svg.select('g.detail').remove();
+
+					svg.append('g')
+						.attr('class', 'detail')
+						.append('text')
+						.attr('class', 'detail')
+						.style('opacity', 0)
+						.style('position', 'relative')
+						.style('z-index', '10000')
+						.style('background', '#000')
+						.attr('fill', '#888')
+						;
+				})
+			}
+		};
+	})
 	;

@@ -11,6 +11,7 @@ lib.php
 index.html
 db_functions.php.changeme
 stats.php
+game_times.php
 player.php
 records.php
 players_per_game.php

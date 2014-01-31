@@ -251,4 +251,14 @@ angular.module('bfstats.controllers', ['ngGrid'])
 				console.log(data);
 			});
 	})
+
+	.controller('GameTimesCtrl', function ($scope, $http) {
+		$http.get('game_times.php')
+			.success(function(data) {
+				$scope.gameTimes = data;
+			})
+			.error(function(data, status, headers, config) {
+				console.log(data);
+			});
+	})
 	;
