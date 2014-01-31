@@ -1,0 +1,14 @@
+{
+    "name":"bfstats",
+    "description":"Statistics viewer for bitfighter.org",
+    "version":"0.2.0",
+    "author":"Bryan Conrad",
+    "devDependencies":{
+        "jake":"",
+        "js-beautify":"",
+        "jshint":"",
+        "jslint":"",
+        "uglify-js":""
+    },
+    "license":"MIT"
+}
