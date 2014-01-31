@@ -12,6 +12,10 @@ var BADGE_MAP = {
     11: ["Last-Second Win", "last_second_win.png"]
 };
 
+function ERROR_HANDLER(data, status) {
+    console.log(data, status);
+}
+
 var PROPERTY_MAP = {
     frags: [{
             name: 'kill_count'
@@ -80,7 +84,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
     .controller('StatsCtrl', function ($scope, $http) {
 
         function getAllStats() {
-            var i;
             var row;
             var params = {
                 month: $scope.selectedPeriod.month + 1,
@@ -103,8 +106,10 @@ angular.module('bfstats.controllers', ['ngGrid'])
                     // convert integer strings to actual integers
                     for (i = 0; i < data.length; i++) {
                         for (j in data[i]) {
-                            if ((+data[i][j]).toString() === data[i][j]) {
-                                data[i][j] = +data[i][j];
+                            if (data[i].hasOwnProperty(j)) {
+                                if ((+data[i][j]).toString() === data[i][j]) {
+                                    data[i][j] = +data[i][j];
+                                }
                             }
                         }
 
@@ -120,9 +125,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
 
                     $scope.stats = data;
                 })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                })['finally'](function () {
+                .error(ERROR_HANDLER)['finally'](function () {
                     $scope.statsLoading = false;
                 });
         }
@@ -132,7 +135,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 month: $scope.selectedPeriod.month + 1,
                 year: $scope.selectedPeriod.year,
                 player: $scope.selectedPlayer.player_name,
-                authed: $scope.selectedPlayer.is_authenticated == '1' ? 'yes' : 'no'
+                authed: $scope.selectedPlayer.is_authenticated === 1 ? 'yes' : 'no'
             };
 
             console.log(params);
@@ -149,12 +152,13 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 .success(function (data) {
                     var i;
                     var achievement;
-                    var row;
 
                     // convert integer strings to actual integers
                     for (i in data) {
-                        if ((+data[i]).toString() === data[i]) {
-                            data[i] = +data[i];
+                        if (data.hasOwnProperty(i)) {
+                            if ((+data[i]).toString() === data[i]) {
+                                data[i] = +data[i];
+                            }
                         }
                     }
 
@@ -168,18 +172,18 @@ angular.module('bfstats.controllers', ['ngGrid'])
                     data.points_per_game = data.points / data.game_count;
 
                     for (i in data.achievements) {
-                        achievement = data.achievements[i];
-                        achievement.hint = BADGE_MAP[achievement.achievement_id][0];
-                        achievement.image = BADGE_MAP[achievement.achievement_id][1];
+                        if (data.achievements.hasOwnProperty(i)) {
+                            achievement = data.achievements[i];
+                            achievement.hint = BADGE_MAP[achievement.achievement_id][0];
+                            achievement.image = BADGE_MAP[achievement.achievement_id][1];
+                        }
                     }
 
                     $scope.player = data;
 
                     console.log(data);
                 })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                })['finally'](function () {
+                .error(ERROR_HANDLER)['finally'](function () {
                     $scope.playerStatsLoading = false;
                 });
         }
@@ -192,9 +196,8 @@ angular.module('bfstats.controllers', ['ngGrid'])
             enableColumnResize: true,
             showColumnMenu: true,
             showFilter: true,
-            // showFooter: true,
             showHeader: true,
-            afterSelectionChange: function (row, event) {
+            afterSelectionChange: function (row) {
                 $scope.selectedPlayer = row.entity;
             },
             multiSelect: false,
@@ -316,9 +319,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
         .success(function (data) {
             $scope.games = data;
         })
-        .error(function (data, status, headers, config) {
-            console.log(data);
-        });
+        .error(ERROR_HANDLER);
 })
 
 .controller('RecordsCtrl', function ($scope, $http) {
@@ -326,9 +327,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
         .success(function (data) {
             $scope.records = data;
         })
-        .error(function (data, status, headers, config) {
-            console.log(data);
-        });
+        .error(ERROR_HANDLER);
 })
 
 .controller('GameTimesCtrl', function ($scope, $http) {
@@ -336,7 +335,5 @@ angular.module('bfstats.controllers', ['ngGrid'])
         .success(function (data) {
             $scope.gameTimes = data;
         })
-        .error(function (data, status, headers, config) {
-            console.log(data);
-        });
+        .error(ERROR_HANDLER);
 });
