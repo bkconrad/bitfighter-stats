@@ -416,30 +416,59 @@ angular.module('bfstats.directives', [])
 							var mousePos = d3.mouse(svg.node());
 							var textBBox;
 							var detailRectPadding = 3;
-							var text = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ').format('ddd hh A ZZ');
-							svg.select('text.detail')
-								.text(d.count + " - " + text)
-								;	
+							var text = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ').format('ddd h A');
+							var boxPos;
+
+							// create the detail box for this rect
+							svg.append('g')
+								.attr('class', 'detail')
+								.style('opacity', 0)
+								.append('rect')
+									.attr('fill', '#222')
+									.attr('stroke', '#111')
+									.attr('height', 30)
+									.attr('width', 60)
+									.attr('y', .5 * -padding)
+								;
+								
+							// show detail text
+							svg.select('g.detail')
+								.append('text')
+									.attr('class', 'detail')
+									.attr('fill', '#888')
+									.text(text + ': ' + d.count + ' games')
+									;	
+
 							textBBox = svg.select('text.detail')
 								.node().getBBox();
 
+							boxPos = {
+								x: this.getAttribute('x') - textBBox.width / 2,
+								y: yScale(d.count)
+							};
+
+							boxPos.x = Math.min(Math.max(boxPos.x, 0), w - textBBox.width);
+							boxPos.y = Math.min(Math.max(boxPos.y, textBBox.height), h);
+
+							// size detail box to text
 							svg.select('g.detail rect')
-								.interrupt()
-								.transition()
 								.attr('width', textBBox.width + detailRectPadding * 2)
 								.attr('height', textBBox.height + detailRectPadding * 2)
 								.attr('x', -detailRectPadding)
 								.attr('y', -textBBox.height - detailRectPadding)
 								;
 
+							// fade in detail box
 							svg.select('g.detail')
+								.attr('transform', 'translate(' + boxPos.x + ',' + boxPos.y + ')')
 								.interrupt()
 								.transition()
 								.duration(300)
-								.attr('transform', 'translate(' + mousePos[0] + ',' + (mousePos[1] - padding) + ')')
+								.delay(50)
 								.style('opacity', 1)
 								;
 
+							// fade bar to highlight color
 							d3.select(this)
 								.transition()
 								.duration(100)
@@ -447,12 +476,12 @@ angular.module('bfstats.directives', [])
 								;
 						})
 						.on('mouseout', function(d) {
-							svg.select('g.detail')
-								.transition()
-								.duration(300)
-								.style('opacity', 0)
-								;
 
+							// remove old detail boxes
+							svg.select('g.detail')
+								.remove();
+
+							// fade bar back to normal color
 							d3.select(this)
 								.transition()
 								.duration(100)
@@ -472,24 +501,6 @@ angular.module('bfstats.directives', [])
 						})
 						;
 
-					svg.select('g.detail').remove();
-
-					svg.append('g')
-						.attr('class', 'detail')
-						.style('opacity', 0)
-						.append('rect')
-							.attr('fill', '#222')
-							.attr('stroke', '#111')
-							.attr('height', 30)
-							.attr('width', 60)
-							.attr('y', .5 * -padding)
-						;
-
-					svg.select('g.detail')
-						.append('text')
-							.attr('class', 'detail')
-							.attr('fill', '#888')
-						;
 				})
 			}
 		};
