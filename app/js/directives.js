@@ -1,3 +1,16 @@
+var COLOR = {
+	axis: '#FFF',
+	datum: '#888',
+	line: '#888',
+	highlight: '#EEE',
+	outline: '#444',
+	backdrop: '#000',
+	background: '#222',
+	text: '#CCC'
+};
+
+var DURATION = 300;
+
 angular.module('bfstats.directives', [])
 /**
  * Create overlapping graphs of data
@@ -59,7 +72,7 @@ angular.module('bfstats.directives', [])
                 // draw x axis
                 d3.select(element[0]).select('svg')
                     .append('g')
-                    .attr('stroke', '#EEE')
+                    .attr('stroke', COLOR.axis)
                     .attr('transform', 'translate(0,' + h + ')')
                     .call(xAxis);
 
@@ -79,7 +92,7 @@ angular.module('bfstats.directives', [])
                 // draw y axis
                 d3.select(element[0]).select('svg')
                     .append('g')
-                    .attr('stroke', '#EEE')
+                    .attr('stroke', COLOR.axis)
                     .attr('transform', 'translate(' + padding + ',0)')
                     .call(yAxis);
 
@@ -107,7 +120,7 @@ angular.module('bfstats.directives', [])
                 d3.select(svg)
                     .attr('width', w + 2 * padding)
                     .attr('height', h + padding)
-                    .style('background', '#000')
+                    .style('background', COLOR.backdrop)
                     .style('margin', 'auto')
                     .style('display', 'block')
 
@@ -116,7 +129,7 @@ angular.module('bfstats.directives', [])
                     .data([data])
                     .attr('d', line)
                     .attr('fill', 'rgba(0,0,0,0)')
-                    .attr('stroke', '#888')
+                    .attr('stroke', COLOR.line)
                     .attr('stroke-width', 3);
 
                 // Set the mouse event handlers
@@ -133,7 +146,7 @@ angular.module('bfstats.directives', [])
                         d3.select(svg).select('text.detail')
                             .transition()
                             .ease('linear')
-                            .duration(100)
+                            .duration(DURATION)
                             .style('opacity', 1)
                             .attr('x', xScale(x))
                             .attr('y', yScale(datum[yprop]))
@@ -148,7 +161,7 @@ angular.module('bfstats.directives', [])
                         d3.select(svg).select('rect.detail')
                             .transition()
                             .ease('linear')
-                            .duration(100)
+                            .duration(DURATION)
                             .style('opacity', 1)
                             .attr('x', xScale(x) - BOX_PADDING)
                             .attr('y', yScale(datum[yprop]) - BOX_PADDING - textHeight)
@@ -160,7 +173,7 @@ angular.module('bfstats.directives', [])
                         // Hide the detail pane
                         d3.select(svg).selectAll('.detail')
                             .transition()
-                            .duration(300)
+                            .duration(DURATION)
                             .style('opacity', 0);
                     });
 
@@ -170,7 +183,7 @@ angular.module('bfstats.directives', [])
                     .attr('class', 'detail')
                     .attr('x', padding)
                     .attr('y', padding)
-                    .attr('fill', '#222')
+                    .attr('fill', COLOR.background)
                     .attr('stroke', '#444');
 
                 // Create the detail text
@@ -179,7 +192,7 @@ angular.module('bfstats.directives', [])
                     .attr('class', 'detail')
                     .attr('x', padding)
                     .attr('y', padding)
-                    .attr('stroke', '#FFF')
+                    .attr('stroke', COLOR.text)
                     .style('vertical-align', 'middle');
             });
         }
@@ -282,7 +295,7 @@ angular.module('bfstats.directives', [])
 
                     svg.selectAll('rect')
                         .attr('fill', function (d, i) {
-                            return i === playerBucket ? '#CCC' : '#444';
+                            return i === playerBucket ? COLOR.highlight : COLOR.datum;
                         });
                 });
             }
@@ -336,7 +349,7 @@ angular.module('bfstats.directives', [])
             svg.attr('width', w);
             svg.attr('height', h + 2 * padding);
             svg.append('g')
-                .attr('stroke', '#FFF')
+                .attr('stroke', COLOR.axis)
                 .attr('transform', 'translate(0,' + (h + 2) + ')')
             //.style('font-size', '7.5px')
             .style('font-weight', 'normal')
@@ -371,7 +384,7 @@ angular.module('bfstats.directives', [])
                         return Math.floor(w / 7 / 24);
                     })
                     .attr('height', 0)
-                    .attr('fill', '#FFF')
+                    .attr('fill', COLOR.datum)
                     .on('mouseover', function (d) {
                         var textBBox;
                         var detailRectPadding = 3;
@@ -383,8 +396,8 @@ angular.module('bfstats.directives', [])
                             .attr('class', 'detail')
                             .style('opacity', 0)
                             .append('rect')
-                            .attr('fill', '#222')
-                            .attr('stroke', '#111')
+                            .attr('fill', COLOR.background)
+                            .attr('stroke', COLOR.outline)
                             .attr('height', 30)
                             .attr('width', 60)
                             .attr('y', 0.5 * -padding);
@@ -393,7 +406,7 @@ angular.module('bfstats.directives', [])
                         svg.select('g.detail')
                             .append('text')
                             .attr('class', 'detail')
-                            .attr('fill', '#888')
+                            .attr('fill', COLOR.text)
                             .text(text + ': ' + d.count + ' games');
 
                         textBBox = svg.select('text.detail')
@@ -419,15 +432,15 @@ angular.module('bfstats.directives', [])
                             .attr('transform', 'translate(' + boxPos.x + ',' + boxPos.y + ')')
                             .interrupt()
                             .transition()
-                            .duration(300)
+                            .duration(DURATION)
                             .delay(50)
                             .style('opacity', 1);
 
                         // fade bar to highlight color
                         d3.select(this)
                             .transition()
-                            .duration(100)
-                            .attr('fill', '#AAA');
+                            .duration(DURATION)
+                            .attr('fill', COLOR.highlight);
                     })
                     .on('mouseout', function () {
 
@@ -438,11 +451,11 @@ angular.module('bfstats.directives', [])
                         // fade bar back to normal color
                         d3.select(this)
                             .transition()
-                            .duration(100)
-                            .attr('fill', '#FFF');
+                            .duration(DURATION)
+                            .attr('fill', COLOR.datum);
                     })
                     .transition()
-                    .duration(500)
+                    .duration(DURATION)
                     .delay(function (d) {
                         return (+d.day * 24 + (+d.hour)) * 20;
                     })
