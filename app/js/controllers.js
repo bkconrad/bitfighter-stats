@@ -199,6 +199,8 @@ angular.module('bfstats.controllers', ['ngGrid'])
             },
             multiSelect: false,
             columnDefs: [{
+                cellTemplate:
+                '<div class="{{row.entity.is_authenticated ? \'authed\' : \'\'}}">{{row.entity[col.field]}}</div>',
                 field: 'player_name',
                 visible: true,
                 displayName: 'Player Name',

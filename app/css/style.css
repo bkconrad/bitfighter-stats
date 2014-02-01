@@ -93,6 +93,11 @@ h4 {
 .achievement {
 }
 
+.authed {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 .stats {
   height: 400px;
 }
