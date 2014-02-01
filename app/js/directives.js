@@ -143,6 +143,23 @@ angular.module('bfstats.directives', [])
                     .attr('stroke', COLOR.line)
                     .attr('stroke-width', 1);
 
+
+                // create the detail box for this rect
+                d3.select(svg).append('g')
+                    .attr('class', 'detail')
+                    .style('opacity', 0)
+                    .append('rect')
+	                    .attr('fill', COLOR.background)
+	                    .attr('stroke', COLOR.outline)
+	                    ;
+
+                // create detail text
+                d3.select(svg).select('g.detail')
+                    .append('text')
+	                    .attr('class', 'detail')
+	                    .attr('fill', COLOR.text)
+	                    ;
+
                 // Set the mouse event handlers
                 d3.select(svg)
                     .on('mousemove', function () {
@@ -153,58 +170,48 @@ angular.module('bfstats.directives', [])
                         var x = Math.round(xScale.invert(d3.mouse(svg)[0]));
                         var datum = data[x];
 
-                        // Move the detail text to the closest data point
-                        d3.select(svg).select('text.detail')
-                            .transition()
-                            .ease('linear')
-                            .duration(DURATION)
-                            .style('opacity', 1)
-                            .attr('x', xScale(x))
-                            .attr('y', yScale(datum[yprop]))
+                        var textBBox;
+                        var detailRectPadding = 3;
+                        var boxPos;
+
+                        // show detail text
+                        d3.select(svg).select('g.detail text')
                             .text(datum[yprop]);
 
-                        // get text height
-                        var bbox = d3.select(svg).select('text.detail').node().getBBox();
-                        var textWidth = bbox.width;
-                        var textHeight = bbox.height;
+                        textBBox = d3.select(svg).select('text.detail')
+                            .node().getBBox();
 
-                        // Move the detail box to the closest data point
-                        d3.select(svg).select('rect.detail')
+                        boxPos = {
+                            x: xScale(x) - textBBox.width / 2,
+                            y: yScale(datum[yprop])
+                        };
+
+                        boxPos.x = Math.min(Math.max(boxPos.x, 0), w - textBBox.width);
+                        boxPos.y = Math.min(Math.max(boxPos.y, textBBox.height), h);
+
+                        // size detail box to text
+                        d3.select(svg).select('g.detail rect')
+                            .attr('width', textBBox.width + detailRectPadding * 2)
+                            .attr('height', textBBox.height + detailRectPadding * 2)
+                            .attr('x', -detailRectPadding)
+                            .attr('y', -textBBox.height - detailRectPadding);
+
+                        // fade in detail box
+                        d3.select(svg).select('g.detail')
+                            .attr('transform', 'translate(' + boxPos.x + ',' + boxPos.y + ')')
+                            .interrupt()
                             .transition()
-                            .ease('linear')
                             .duration(DURATION)
-                            .style('opacity', 1)
-                            .attr('x', xScale(x) - BOX_PADDING)
-                            .attr('y', yScale(datum[yprop]) - BOX_PADDING - textHeight)
-                            .attr('width', textWidth + 2 * BOX_PADDING)
-                            .attr('height', textHeight + 2 * BOX_PADDING)
-                            .text(datum[yprop]);
+                            .delay(50)
+                            .style('opacity', 1);
                     })
                     .on('mouseout', function () {
                         // Hide the detail pane
-                        d3.select(svg).selectAll('.detail')
+                        d3.select(svg).selectAll('g.detail')
                             .transition()
                             .duration(DURATION)
                             .style('opacity', 0);
                     });
-
-                // Create the detail box
-                d3.select(svg)
-                    .append('svg:rect')
-                    .attr('class', 'detail')
-                    .attr('x', padding)
-                    .attr('y', padding)
-                    .attr('fill', COLOR.background)
-                    .attr('stroke', '#444');
-
-                // Create the detail text
-                d3.select(svg)
-                    .append('svg:text')
-                    .attr('class', 'detail')
-                    .attr('x', padding)
-                    .attr('y', padding)
-                    .attr('fill', COLOR.text)
-                    .style('vertical-align', 'middle');
 
                 // Add a title header
                 headerText = d3.select(svg)
