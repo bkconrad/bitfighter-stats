@@ -92,6 +92,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
             $scope.statsLoading = true;
 
             $http.get('stats.php', {
+                cache: true,
                 params: params
             })
                 .success(function (data) {
@@ -139,6 +140,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
             $scope.playerStatsLoading = true;
 
             $http.get('player.php', {
+                cache: true,
                 params: params
             })
                 .success(function (data) {
@@ -308,13 +310,13 @@ angular.module('bfstats.controllers', ['ngGrid'])
         y: 'unique_player_count'
     };
 
-    $http.get('players_per_game.php')
+    $http.get('players_per_game.php', { cache: true })
         .success(function (data) {
             $scope.games = data;
         })
         .error(ERROR_HANDLER);
 
-    $http.get('game_times.php')
+    $http.get('game_times.php', { cache: true })
         .success(function (data) {
             $scope.gameTimes = data;
         })
@@ -323,7 +325,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
 
 .controller('RecordsCtrl', function ($scope, $http) {
     $scope.propertyMap = PROPERTY_MAP;
-    $http.get('records.php')
+    $http.get('records.php', { cache: true })
         .success(function (data) {
             $scope.records = data;
         })
