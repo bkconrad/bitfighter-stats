@@ -5,6 +5,7 @@ DEPLOY_DIR=/var/www/html/new-stats
 DEPLOY_FILES=$(cat <<EOF
 app/
 lib/
+build/
 assets/
 badges/
 lib.php
