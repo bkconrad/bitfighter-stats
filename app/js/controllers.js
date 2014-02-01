@@ -18,21 +18,18 @@ function ERROR_HANDLER(data, status) {
 
 var PROPERTY_MAP = {
     frags: [{
-            name: 'kill_count'
-        }, {
-            name: 'death_count'
-        }, {
-            name: 'suicide_count'
-        }, {
-            name: 'kill_death_ratio'
-        }, {
-            name: 'spread'
-        }, {
-            name: 'spread_per_game'
-        }
-        // Spread:     <span class="stat">{{player.kill_count - player.death_count}}</span><br/>
-        // Spread/game:<span class="stat">{{(player.kill_count - player.death_count) / player.game_count | number:2}}</span><br/>
-    ],
+        name: 'kill_count'
+    }, {
+        name: 'death_count'
+    }, {
+        name: 'suicide_count'
+    }, {
+        name: 'kill_death_ratio'
+    }, {
+        name: 'spread'
+    }, {
+        name: 'spread_per_game'
+    }],
     flags: [{
         name: 'flag_pickups'
     }, {

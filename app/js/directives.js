@@ -141,7 +141,7 @@ angular.module('bfstats.directives', [])
                     .attr('d', line)
                     .attr('fill', 'rgba(0,0,0,0)')
                     .attr('stroke', COLOR.line)
-                    .attr('stroke-width', 3);
+                    .attr('stroke-width', 1);
 
                 // Set the mouse event handlers
                 d3.select(svg)

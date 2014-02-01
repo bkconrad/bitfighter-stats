@@ -1,4 +1,14 @@
 angular.module('bfstats.filters', [])
+    .filter('titlecase', function () {
+        return function (input) {
+            return input
+                .split(' ')
+                .map(function(x) {
+                    return x[0].toUpperCase() + x.slice(1);
+                })
+                .join(' ');
+        };
+    })
     .filter('percentage', function () {
         return function (input) {
             var val = parseFloat(input) || 0;

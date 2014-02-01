@@ -18,7 +18,7 @@
 
 	<div class="row">
 		<div class="col-xs-12 col-md-4" ng-repeat="(group, propertyDefs) in propertyMap" id="{{group}}">
-			<h4>{{group}}</h4>
+			<h4>{{group | titlecase}}</h4>
 			<div ng-repeat="property in propertyDefs">
 			{{property.name | statName}}
 			<span style="float: right" bf-rank="property.name"></span>
