@@ -15,6 +15,17 @@ function get_params($mysqli, $arr) {
   }
 }
 
+function check_params($arr) {
+  foreach ($arr as $key => $value) {
+    global $$key;
+    if (!isset($_REQUEST[$key])) {
+      $$key = $value;
+    } else {
+      $$key = $_REQUEST[$key];
+    }
+  }
+}
+
 function time_ago ($oldtime) {
   $secs = time() - strtotime($oldtime);
   $bit = array(
@@ -48,14 +59,14 @@ function time_ago ($oldtime) {
  * If the value can not be retrieved from the cache, it is generated and
  * inserted.
  */ 
-function cache($key, $fn) {
+function cache($key, $ttl, $fn) {
   $success = false;
   $value = apc_fetch($key, $success);
 
   if(!$success) {
     // value wasn't found, evaluate fn and use that
     $value = $fn();
-    apc_store($key, $value);
+    apc_store($key, $value, $ttl);
   }
 
   return $value;
