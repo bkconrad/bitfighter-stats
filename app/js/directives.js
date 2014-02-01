@@ -50,6 +50,8 @@ angular.module('bfstats.directives', [])
                 var yprop = options.y;
                 var headerText;
                 var headerBBox;
+                var min;
+                var max;
 
                 // bail if the value is falsey
                 if (!newVal) {
@@ -68,9 +70,17 @@ angular.module('bfstats.directives', [])
                 	return xScale(moment(d[xprop], 'YYYY-MM-DD').toDate());
                 }
 
+                min = data.reduce(function(a, b) {
+                	return a[xprop] < b[xprop] ? a : b;
+                })[xprop];
+
+                max = data.reduce(function(a, b) {
+                	return a[xprop] > b[xprop] ? a : b;
+                })[xprop];
+
                 var domain = [
-                	moment().day(-120).toDate(),
-                	moment().toDate()
+                	moment(min, 'YYYY-MM-DD').toDate(),
+                	moment(max, 'YYYY-MM-DD').toDate()
                 ];
 
                 var xScale = d3.time.scale()
@@ -80,7 +90,7 @@ angular.module('bfstats.directives', [])
 
                 var xAxis = d3.svg.axis()
                     .scale(xScale)
-                    .ticks(5)
+                    .ticks(4)
                     .orient('bottom');
 
                 // draw x axis
