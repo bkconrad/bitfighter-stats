@@ -65,22 +65,17 @@ angular.module('bfstats.directives', [])
                     }
                 }
 
-                // find the x position of the given datum
-                function xOf(d) {
-                	return xScale(moment(d[xprop], 'YYYY-MM-DD').toDate());
-                }
-
-                min = data.reduce(function(a, b) {
-                	return a[xprop] < b[xprop] ? a : b;
+                min = data.reduce(function (a, b) {
+                    return a[xprop] < b[xprop] ? a : b;
                 })[xprop];
 
-                max = data.reduce(function(a, b) {
-                	return a[xprop] > b[xprop] ? a : b;
+                max = data.reduce(function (a, b) {
+                    return a[xprop] > b[xprop] ? a : b;
                 })[xprop];
 
                 var domain = [
-                	moment(min, 'YYYY-MM-DD').toDate(),
-                	moment(max, 'YYYY-MM-DD').toDate()
+                    moment(min, 'YYYY-MM-DD').toDate(),
+                    moment(max, 'YYYY-MM-DD').toDate()
                 ];
 
                 var xScale = d3.time.scale()
@@ -92,6 +87,11 @@ angular.module('bfstats.directives', [])
                     .scale(xScale)
                     .ticks(4)
                     .orient('bottom');
+
+                // find the x position of the given datum
+                function xOf(d) {
+                    return xScale(moment(d[xprop], 'YYYY-MM-DD').toDate());
+                }
 
                 // draw x axis
                 d3.select(element[0]).select('svg')
@@ -179,14 +179,14 @@ angular.module('bfstats.directives', [])
 
                         // Find the datum with the closest x-distance
                         var date = moment(xScale.invert(d3.mouse(svg)[0])).format('YYYY-MM-DD');
-                        var datum = data.reduce(function(last, current, index) {
-                        	if(current[xprop] == date) {
-                        		return current;
-                        	}
-                        	return last;
+                        var datum = data.reduce(function (last, current, index) {
+                            if (current[xprop] === date) {
+                                return current;
+                            }
+                            return last;
                         }, false);
 
-                        var prettyDate = moment(date, 'YYYY-MM-DD').format('MMM DD')
+                        var prettyDate = moment(date, 'YYYY-MM-DD').format('MMM DD');
                         var textBBox;
                         var detailRectPadding = 3;
                         var boxPos;
@@ -258,11 +258,9 @@ angular.module('bfstats.directives', [])
                 var h = 15;
                 var hist;
                 var histData;
-                var k;
                 var playerBucket;
                 var playerRank;
                 var prop = scope.$eval(attributes.bfRank);
-                var stats = scope.$eval('stats');
                 var svg = d3.select(element[0]).select('svg');
                 var w = 100;
                 var yExtent;
@@ -272,60 +270,60 @@ angular.module('bfstats.directives', [])
                     return parseFloat(d[prop]);
                 };
 
-                scope.$watchCollection('stats', function(newVal) {
-                	data = [];
-	                for (k in newVal) {
-	                    if (newVal.hasOwnProperty(k)) {
-	                        data.push(newVal[k]);
-	                    }
-	                }
+                scope.$watchCollection('stats', function (newVal) {
+                    var k;
+                    data = [];
+                    for (k in newVal) {
+                        if (newVal.hasOwnProperty(k)) {
+                            data.push(newVal[k]);
+                        }
+                    }
 
-	                yExtent = d3.extent(data, accessor);
+                    yExtent = d3.extent(data, accessor);
 
-	                hist = d3.layout.histogram()
-	                    .value(function (d) {
-	                        return d[prop];
-	                    })
-	                    .range(yExtent)
-	                    .bins(buckets);
+                    hist = d3.layout.histogram()
+                        .value(function (d) {
+                            return d[prop];
+                        })
+                        .range(yExtent)
+                        .bins(buckets);
 
-	                histData = hist(data);
+                    histData = hist(data);
 
-	                binMax = d3.max(histData, function (d) {
-	                    return d.y;
-	                });
+                    binMax = d3.max(histData, function (d) {
+                        return d.y;
+                    });
 
-	                var yMin = 0.1;
-	                yScale = d3.scale.log()
-	                    .domain([yMin, binMax])
-	                    .range([h - barBaseSize, 0])
-	                    .clamp(true);
+                    var yMin = 0.1;
+                    yScale = d3.scale.log()
+                        .domain([yMin, binMax])
+                        .range([h - barBaseSize, 0])
+                        .clamp(true);
 
-	                svg.attr('width', w);
-	                svg.attr('height', h);
+                    svg.attr('width', w);
+                    svg.attr('height', h);
 
-	                bucketWidth = Math.round(w / buckets);
+                    bucketWidth = Math.round(w / buckets);
 
-	                function configureBins(selection) {
-	                	selection
-		                    .attr('x', function (d, i) {
-		                        return Math.floor(bucketWidth * i);
-		                    })
-		                    .attr('y', function (d) {
-		                        return Math.floor(yScale(Math.max(d.y, yMin)));
-		                    })
-		                    .attr('width', Math.floor(bucketWidth - 2))
-		                    .attr('height', function (d) {
-		                        return Math.ceil(h - Math.floor(yScale(Math.max(d.y, yMin)))) + barBaseSize;
-		                    });
-	                }
+                    function configureBins(selection) {
+                        selection
+                            .attr('x', function (d, i) {
+                                return Math.floor(bucketWidth * i);
+                            })
+                            .attr('y', function (d) {
+                                return Math.floor(yScale(Math.max(d.y, yMin)));
+                            })
+                            .attr('width', Math.floor(bucketWidth - 2))
+                            .attr('height', function (d) {
+                                return Math.ceil(h - Math.floor(yScale(Math.max(d.y, yMin)))) + barBaseSize;
+                            });
+                    }
 
-	                svg.selectAll('rect')
-	                    .data(histData)
-	                    .call(configureBins)
-                    .enter().append('svg:rect')
-	                    .call(configureBins)
-	                    ;
+                    svg.selectAll('rect')
+                        .data(histData)
+                        .call(configureBins)
+                        .enter().append('svg:rect')
+                        .call(configureBins);
                 });
 
                 scope.$watchCollection('player', function (newVal) {
