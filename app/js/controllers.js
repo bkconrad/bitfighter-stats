@@ -72,9 +72,7 @@ var PROPERTY_MAP = {
         name: 'distance_traveled'
     }, {
         name: 'teleport_uses'
-    }, {
-        name: 'last_update'
-    }, ]
+    }]
 };
 
 angular.module('bfstats.controllers', ['ngGrid'])

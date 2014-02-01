@@ -84,6 +84,14 @@ if ($alltime == 'yes') {
       , switched_team_count
       , last_played
       , is_authenticated
+      , turret_kills
+      , ff_kills
+      , asteroid_kills
+      , turrets_engineered
+      , ffs_engineered
+      , teleports_engineered
+      , distance_traveled
+      , switched_team_count
     FROM player_mv
     $filter
     ;
