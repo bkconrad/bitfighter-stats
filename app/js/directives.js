@@ -1,12 +1,12 @@
 var COLOR = {
     axis: '#FFF',
-    datum: '#888',
+    datum: '#444',
     line: '#888',
-    highlight: '#EEE',
+    highlight: '#CCC',
     outline: '#444',
     backdrop: '#000',
-    background: '#222',
-    text: '#CCC'
+    background: '#111',
+    text: '#EEE'
 };
 
 var DURATION = 300;
