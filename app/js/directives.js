@@ -472,7 +472,8 @@ angular.module('bfstats.directives', [])
                         // fade bar to highlight color
                         d3.select(this)
                             .transition()
-                            .duration(DURATION)
+                            .ease('ease-out')
+                            .duration(100)
                             .attr('fill', COLOR.highlight);
                     })
                     .on('mouseout', function () {
@@ -490,7 +491,7 @@ angular.module('bfstats.directives', [])
                     .transition()
                     .duration(DURATION)
                     .delay(function (d) {
-                        return (+d.day * 24 + (+d.hour)) * 20;
+                        return (+d.day * 24 + (+d.hour)) * 10;
                     })
                     .attr('y', function (d) {
                         return Math.floor(yScale(accessor(d)));
