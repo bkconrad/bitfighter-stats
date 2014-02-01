@@ -139,16 +139,13 @@ angular.module('bfstats.directives', [])
                     .attr('x', padding)
                     .attr('width', w - padding)
                     .attr('height', h)
-                // .attr('fill', 'red')
                 ;
 
                 // Setup the chart properties
                 d3.select(svg)
-                    .attr('width', w + 2 * padding)
+                    .attr('width', w)
                     .attr('height', h + padding)
                     .style('background', COLOR.backdrop)
-                    .style('margin', 'auto')
-                    .style('display', 'block')
 
                 // Add the data line
                 .append('svg:path')
