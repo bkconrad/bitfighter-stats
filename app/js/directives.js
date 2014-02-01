@@ -1,24 +1,23 @@
 var COLOR = {
-	axis: '#FFF',
-	datum: '#888',
-	line: '#888',
-	highlight: '#EEE',
-	outline: '#444',
-	backdrop: '#000',
-	background: '#222',
-	text: '#CCC'
+    axis: '#FFF',
+    datum: '#888',
+    line: '#888',
+    highlight: '#EEE',
+    outline: '#444',
+    backdrop: '#000',
+    background: '#222',
+    text: '#CCC'
 };
 
 var DURATION = 300;
 
 function bfAxis(axis) {
-	return axis
-		.attr('stroke', COLOR.axis)
-		.selectAll('text')
-			.attr('stroke', 'transparent')
-			.attr('fill', COLOR.axis)
-			.style('font-weight', 'normal')
-		;
+    return axis
+        .attr('stroke', COLOR.axis)
+        .selectAll('text')
+        .attr('stroke', 'transparent')
+        .attr('fill', COLOR.axis)
+        .style('font-weight', 'normal');
 }
 
 angular.module('bfstats.directives', [])
@@ -85,7 +84,7 @@ angular.module('bfstats.directives', [])
                     .attr('stroke', COLOR.axis)
                     .attr('transform', 'translate(0,' + h + ')')
                     .call(xAxis)
-	            	.call(bfAxis);
+                    .call(bfAxis);
 
                 // build a y scale from 0 to the max y value plus some head room
                 var yMax = d3.max(data, function (d) {
@@ -106,7 +105,7 @@ angular.module('bfstats.directives', [])
                     .attr('stroke', COLOR.axis)
                     .attr('transform', 'translate(' + padding + ',0)')
                     .call(yAxis)
-	            	.call(bfAxis);
+                    .call(bfAxis);
 
                 // create line generator
                 var line = d3.svg.line()
@@ -364,7 +363,7 @@ angular.module('bfstats.directives', [])
                 .attr('stroke', COLOR.axis)
                 .attr('transform', 'translate(0,' + (h + 2) + ')')
                 .call(xAxis)
-            	.call(bfAxis);
+                .call(bfAxis);
 
             scope.$watchCollection(attributes.bfGameTimes, function (newVal) {
                 var k2;
