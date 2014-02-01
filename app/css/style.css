@@ -49,6 +49,10 @@ h4 {
   /*text-align: left;*/
 }
 
+.games {
+  text-align: center;
+}
+
 .navmenu {
   line-height: 60px;
   font-size: 30px;

@@ -313,6 +313,12 @@ angular.module('bfstats.controllers', ['ngGrid'])
             $scope.games = data;
         })
         .error(ERROR_HANDLER);
+
+    $http.get('game_times.php')
+        .success(function (data) {
+            $scope.gameTimes = data;
+        })
+        .error(ERROR_HANDLER);
 })
 
 .controller('RecordsCtrl', function ($scope, $http) {
@@ -322,11 +328,3 @@ angular.module('bfstats.controllers', ['ngGrid'])
         })
         .error(ERROR_HANDLER);
 })
-
-.controller('GameTimesCtrl', function ($scope, $http) {
-    $http.get('game_times.php')
-        .success(function (data) {
-            $scope.gameTimes = data;
-        })
-        .error(ERROR_HANDLER);
-});

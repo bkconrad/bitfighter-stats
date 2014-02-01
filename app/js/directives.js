@@ -365,7 +365,7 @@ angular.module('bfstats.directives', [])
         link: function (scope, element, attributes) {
             var times = scope.$eval(attributes.bfGameTimes);
             var data = [];
-            var widthScale = Math.floor(element[0].clientWidth / (24 * 7));
+            var widthScale = Math.max(1, Math.floor(element[0].clientWidth / (24 * 7)));
             var w = widthScale * 24 * 7 - widthScale + 1;
             var h = 150;
             var padding = 30;
