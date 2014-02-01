@@ -76,7 +76,7 @@ var PROPERTY_MAP = {
 };
 
 angular.module('bfstats.controllers', ['ngGrid'])
-    .controller('StatsCtrl', function ($scope, $http) {
+    .controller('StatsCtrl', ['$scope', '$http', function ($scope, $http) {
 
         function getAllStats() {
             var row;
@@ -282,9 +282,9 @@ angular.module('bfstats.controllers', ['ngGrid'])
         $scope.$watch('selectedPlayer', getPlayerStats);
 
         getAllStats();
-    })
+    }])
 
-.controller('GamesCtrl', function ($scope, $http) {
+.controller('GamesCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.playersPerGameOptions = {
         header: 'Players Per Game',
         data: 'games',
@@ -310,13 +310,14 @@ angular.module('bfstats.controllers', ['ngGrid'])
             $scope.gameTimes = data;
         })
         .error(ERROR_HANDLER);
-})
+}])
 
-.controller('RecordsCtrl', function ($scope, $http) {
+.controller('RecordsCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.propertyMap = PROPERTY_MAP;
     $http.get('records.php', { cache: true })
         .success(function (data) {
             $scope.records = data;
         })
         .error(ERROR_HANDLER);
-})
+}])
+;
