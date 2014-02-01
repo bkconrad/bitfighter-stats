@@ -85,12 +85,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 year: $scope.selectedPeriod.year
             };
 
-            if ($scope.statsLoading) {
-                return;
-            }
-
-            $scope.statsLoading = true;
-
             $http.get('stats.php', {
                 cache: true,
                 params: params
@@ -120,9 +114,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
 
                     $scope.stats = data;
                 })
-                .error(ERROR_HANDLER)['finally'](function () {
-                    $scope.statsLoading = false;
-                });
+                .error(ERROR_HANDLER);
         }
 
 
@@ -139,12 +131,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 player: $scope.selectedPlayer.player_name,
                 authed: $scope.selectedPlayer.is_authenticated === 1 ? 'yes' : 'no'
             };
-
-            if ($scope.playerStatsLoading) {
-                return;
-            }
-
-            $scope.playerStatsLoading = true;
 
             $http.get('player.php', {
                 cache: true,
@@ -181,14 +167,10 @@ angular.module('bfstats.controllers', ['ngGrid'])
 
                     $scope.player = data;
                 })
-                .error(ERROR_HANDLER)['finally'](function () {
-                    $scope.playerStatsLoading = false;
-                });
+                .error(ERROR_HANDLER);
         }
 
         $scope.propertyMap = PROPERTY_MAP;
-
-        $scope.loadingStyle = 'loading';
 
         $scope.options = {
             enableColumnResize: true,

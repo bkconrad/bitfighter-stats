@@ -1,6 +1,8 @@
 // Declare app level module which depends on filters, and services
 angular.module('bfstats', [
     'ngRoute',
+    // 'ngAnimate',
+    'chieffancypants.loadingBar',
     'bfstats.filters',
     'bfstats.directives',
     'bfstats.controllers'
