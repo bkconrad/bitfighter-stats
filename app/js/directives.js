@@ -198,11 +198,11 @@ angular.module('bfstats.directives', [])
 
                         // fade in detail box
                         d3.select(svg).select('g.detail')
-                            .attr('transform', 'translate(' + boxPos.x + ',' + boxPos.y + ')')
-                            .interrupt()
+                        	.interrupt()
                             .transition()
-                            .duration(DURATION)
-                            .delay(50)
+                            .ease('linear')
+                            .duration(100)
+                            .attr('transform', 'translate(' + boxPos.x + ',' + boxPos.y + ')')
                             .style('opacity', 1);
                     })
                     .on('mouseout', function () {
