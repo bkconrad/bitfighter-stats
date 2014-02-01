@@ -477,7 +477,7 @@ angular.module('bfstats.directives', [])
                             .attr('width', textBBox.width + detailRectPadding * 2)
                             .attr('height', textBBox.height + detailRectPadding * 2)
                             .attr('x', -detailRectPadding)
-                            .attr('y', -textBBox.height - detailRectPadding);
+                            .attr('y', -textBBox.height);
 
                         // fade in detail box
                         svg.select('g.detail')
