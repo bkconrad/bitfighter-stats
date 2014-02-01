@@ -11,6 +11,16 @@ var COLOR = {
 
 var DURATION = 300;
 
+function bfAxis(axis) {
+	return axis
+		.attr('stroke', COLOR.axis)
+		.selectAll('text')
+			.attr('stroke', 'transparent')
+			.attr('fill', COLOR.axis)
+			.style('font-weight', 'normal')
+		;
+}
+
 angular.module('bfstats.directives', [])
 /**
  * Create overlapping graphs of data
@@ -74,7 +84,8 @@ angular.module('bfstats.directives', [])
                     .append('g')
                     .attr('stroke', COLOR.axis)
                     .attr('transform', 'translate(0,' + h + ')')
-                    .call(xAxis);
+                    .call(xAxis)
+	            	.call(bfAxis);
 
                 // build a y scale from 0 to the max y value plus some head room
                 var yMax = d3.max(data, function (d) {
@@ -94,7 +105,8 @@ angular.module('bfstats.directives', [])
                     .append('g')
                     .attr('stroke', COLOR.axis)
                     .attr('transform', 'translate(' + padding + ',0)')
-                    .call(yAxis);
+                    .call(yAxis)
+	            	.call(bfAxis);
 
                 // create line generator
                 var line = d3.svg.line()
@@ -351,9 +363,8 @@ angular.module('bfstats.directives', [])
             svg.append('g')
                 .attr('stroke', COLOR.axis)
                 .attr('transform', 'translate(0,' + (h + 2) + ')')
-            //.style('font-size', '7.5px')
-            .style('font-weight', 'normal')
-                .call(xAxis);
+                .call(xAxis)
+            	.call(bfAxis);
 
             scope.$watchCollection(attributes.bfGameTimes, function (newVal) {
                 var k2;
