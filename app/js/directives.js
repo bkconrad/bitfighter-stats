@@ -295,8 +295,9 @@ angular.module('bfstats.directives', [])
 	                    return d.y;
 	                });
 
+	                var yMin = 0.1;
 	                yScale = d3.scale.log()
-	                    .domain([0.1, binMax])
+	                    .domain([yMin, binMax])
 	                    .range([h - barBaseSize, 0])
 	                    .clamp(true);
 
@@ -311,11 +312,11 @@ angular.module('bfstats.directives', [])
 		                        return Math.floor(bucketWidth * i);
 		                    })
 		                    .attr('y', function (d) {
-		                        return Math.floor(yScale(d.y));
+		                        return Math.floor(yScale(Math.max(d.y, yMin)));
 		                    })
 		                    .attr('width', Math.floor(bucketWidth - 2))
 		                    .attr('height', function (d) {
-		                        return Math.ceil(h - Math.floor(yScale(d.y))) + barBaseSize;
+		                        return Math.ceil(h - Math.floor(yScale(Math.max(d.y, yMin)))) + barBaseSize;
 		                    });
 	                }
 
