@@ -125,8 +125,15 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 });
         }
 
+
         function getPlayerStats() {
-            var params = {
+            var params;
+
+            if(!$scope.selectedPlayer) {
+                return;
+            }
+
+            params = {
                 month: $scope.selectedPeriod.month + 1,
                 year: $scope.selectedPeriod.year,
                 player: $scope.selectedPlayer.player_name,
