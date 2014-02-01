@@ -186,13 +186,14 @@ angular.module('bfstats.directives', [])
                         	return last;
                         }, false);
 
+                        var prettyDate = moment(date, 'YYYY-MM-DD').format('MMM DD')
                         var textBBox;
                         var detailRectPadding = 3;
                         var boxPos;
 
                         // show detail text
                         d3.select(svg).select('g.detail text')
-                            .text(datum[yprop]);
+                            .text(prettyDate + ': ' + datum[yprop]);
 
                         textBBox = d3.select(svg).select('text.detail')
                             .node().getBBox();
@@ -210,13 +211,11 @@ angular.module('bfstats.directives', [])
                             .attr('width', textBBox.width + detailRectPadding * 2)
                             .attr('height', textBBox.height + detailRectPadding * 2)
                             .attr('x', -detailRectPadding)
-                            .attr('y', -textBBox.height - detailRectPadding);
+                            .attr('y', -textBBox.height);
 
                         // fade in detail box
                         d3.select(svg).select('g.detail')
-                            .interrupt()
                             .transition()
-                            .ease('linear')
                             .duration(100)
                             .attr('transform', 'translate(' + boxPos.x + ',' + boxPos.y + ')')
                             .style('opacity', 1);
