@@ -48,6 +48,8 @@ angular.module('bfstats.directives', [])
                 var padding = 30;
                 var xprop = options.x;
                 var yprop = options.y;
+                var headerText;
+                var headerBBox;
 
                 // bail if the value is falsey
                 if (!newVal) {
@@ -149,22 +151,18 @@ angular.module('bfstats.directives', [])
                     .attr('class', 'detail')
                     .style('opacity', 0)
                     .append('rect')
-	                    .attr('fill', COLOR.background)
-	                    .attr('stroke', COLOR.outline)
-	                    ;
+                    .attr('fill', COLOR.background)
+                    .attr('stroke', COLOR.outline);
 
                 // create detail text
                 d3.select(svg).select('g.detail')
                     .append('text')
-	                    .attr('class', 'detail')
-	                    .attr('fill', COLOR.text)
-	                    ;
+                    .attr('class', 'detail')
+                    .attr('fill', COLOR.text);
 
                 // Set the mouse event handlers
                 d3.select(svg)
                     .on('mousemove', function () {
-
-                        var BOX_PADDING = 3;
 
                         // Find the datum with the closest x-distance
                         var x = Math.round(xScale.invert(d3.mouse(svg)[0]));
@@ -198,7 +196,7 @@ angular.module('bfstats.directives', [])
 
                         // fade in detail box
                         d3.select(svg).select('g.detail')
-                        	.interrupt()
+                            .interrupt()
                             .transition()
                             .ease('linear')
                             .duration(100)
@@ -215,19 +213,17 @@ angular.module('bfstats.directives', [])
 
                 // Add a title header
                 headerText = d3.select(svg)
-                	.append('svg:text')
-                	.text(options['header'])
-                	.attr('class', 'header')
-                	.attr('fill', COLOR.text)
-                	.attr('font-weight', 'bold')
-                	;
+                    .append('svg:text')
+                    .text(options.header)
+                    .attr('class', 'header')
+                    .attr('fill', COLOR.text)
+                    .attr('font-weight', 'bold');
 
                 headerBBox = headerText.node().getBBox();
                 headerText
-                	.attr('text-anchor', 'middle')
-                	.attr('x', (w - padding)/2 + padding)
-                	.attr('y', headerBBox.height)
-                	;
+                    .attr('text-anchor', 'middle')
+                    .attr('x', (w - padding) / 2 + padding)
+                    .attr('y', headerBBox.height);
             });
         }
     };

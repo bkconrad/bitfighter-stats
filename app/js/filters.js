@@ -3,7 +3,7 @@ angular.module('bfstats.filters', [])
         return function (input) {
             return input
                 .split(' ')
-                .map(function(x) {
+                .map(function (x) {
                     return x[0].toUpperCase() + x.slice(1);
                 })
                 .join(' ');
