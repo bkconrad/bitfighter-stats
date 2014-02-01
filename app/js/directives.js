@@ -365,7 +365,8 @@ angular.module('bfstats.directives', [])
         link: function (scope, element, attributes) {
             var times = scope.$eval(attributes.bfGameTimes);
             var data = [];
-            var w = 24 * 7 * 6 - 5;
+            var widthScale = Math.floor(element[0].clientWidth / (24 * 7));
+            var w = widthScale * 24 * 7 - widthScale + 1;
             var h = 150;
             var padding = 30;
             var svg = d3.select(element[0]).select('svg');
