@@ -5,6 +5,7 @@ date_default_timezone_set('America/Denver');
 require "db_functions.php";
 require "lib.php";
 
+header('Content-Type: application/json');
 echo cache('players_per_game', 60 * 60 * 24, function() {
 	$query = "
 

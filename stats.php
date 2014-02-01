@@ -18,6 +18,7 @@ if($month == date('n')) {
   $ttl = 10 * 60;
 }
 
+header('Content-Type: application/json');
 echo cache("stats$year$month", $ttl, function() {
 
   global $alltime, $year, $month;

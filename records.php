@@ -6,6 +6,8 @@ require "lib.php";
 date_default_timezone_set('America/Los_Angeles');
 
 $key = date('Ymd').'records';
+
+header('Content-Type: application/json');
 echo cache($key, 60 * 60 * 24, function() {
 
   $mysqli = connect_to_db();
