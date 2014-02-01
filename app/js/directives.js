@@ -60,24 +60,27 @@ angular.module('bfstats.directives', [])
                 for (k in newVal) {
                     if (newVal.hasOwnProperty(k)) {
                         data.push(newVal[k]);
-
-                        // add an index field to the data
-                        data[data.length - 1].x = data.length - 1;
                     }
                 }
 
-                // build an x scale and axis from 0 to the max x value
-                var xMax = d3.max(data, function (d) {
-                    return d[xprop];
-                });
+                // find the x position of the given datum
+                function xOf(d) {
+                	return xScale(moment(d[xprop], 'YYYY-MM-DD').toDate());
+                }
 
-                var xScale = d3.scale.linear()
-                    .domain([0, xMax])
+                var domain = [
+                	moment().day(-120).toDate(),
+                	moment().toDate()
+                ];
+
+                var xScale = d3.time.scale()
+                    .domain(domain)
                     .range([padding, w])
                     .nice();
 
                 var xAxis = d3.svg.axis()
                     .scale(xScale)
+                    .ticks(5)
                     .orient('bottom');
 
                 // draw x axis
@@ -112,7 +115,7 @@ angular.module('bfstats.directives', [])
                 // create line generator
                 var line = d3.svg.line()
                     .x(function (d) {
-                        return xScale(d[xprop]);
+                        return xOf(d);
                     })
                     .y(function (d) {
                         return yScale(d[yprop]);
@@ -165,8 +168,13 @@ angular.module('bfstats.directives', [])
                     .on('mousemove', function () {
 
                         // Find the datum with the closest x-distance
-                        var x = Math.round(xScale.invert(d3.mouse(svg)[0]));
-                        var datum = data[x];
+                        var date = moment(xScale.invert(d3.mouse(svg)[0])).format('YYYY-MM-DD');
+                        var datum = data.reduce(function(last, current, index) {
+                        	if(current[xprop] == date) {
+                        		return current;
+                        	}
+                        	return last;
+                        }, false);
 
                         var textBBox;
                         var detailRectPadding = 3;
@@ -180,7 +188,7 @@ angular.module('bfstats.directives', [])
                             .node().getBBox();
 
                         boxPos = {
-                            x: xScale(x) - textBBox.width / 2,
+                            x: xOf(datum) - textBBox.width / 2,
                             y: yScale(datum[yprop])
                         };
 
@@ -415,7 +423,6 @@ angular.module('bfstats.directives', [])
                     .enter().append('svg:rect')
                     .attr('x', function (d) {
                         var dataMoment = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ');
-                        console.log(dataMoment.toString());
                         return Math.floor(xScale(dataMoment.toDate()));
                     })
                     .attr('y', h)

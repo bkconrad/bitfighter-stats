@@ -303,20 +303,21 @@ angular.module('bfstats.controllers', ['ngGrid'])
     $scope.playersPerGameOptions = {
         header: 'Players Per Game',
         data: 'games',
-        x: 'x',
+        x: 'day_date',
         y: 'players_per_game'
     };
 
     $scope.uniquePlayersOptions = {
         header: 'Unique Players',
         data: 'games',
-        x: 'x',
+        x: 'day_date',
         y: 'unique_player_count'
     };
 
     $http.get('players_per_game.php')
         .success(function (data) {
             $scope.games = data;
+            console.log(data);
         })
         .error(ERROR_HANDLER);
 })
