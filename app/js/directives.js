@@ -251,54 +251,64 @@ angular.module('bfstats.directives', [])
                 var yExtent;
                 var yScale;
 
-                for (k in stats) {
-                    if (stats.hasOwnProperty(k)) {
-                        data.push(stats[k]);
-                    }
-                }
-
                 var accessor = function (d) {
                     return parseFloat(d[prop]);
                 };
 
-                yExtent = d3.extent(data, accessor);
+                scope.$watchCollection('stats', function(newVal) {
+                	data = [];
+	                for (k in newVal) {
+	                    if (newVal.hasOwnProperty(k)) {
+	                        data.push(newVal[k]);
+	                    }
+	                }
 
-                hist = d3.layout.histogram()
-                    .value(function (d) {
-                        return d[prop];
-                    })
-                    .range(yExtent)
-                    .bins(buckets);
+	                yExtent = d3.extent(data, accessor);
 
-                histData = hist(data);
+	                hist = d3.layout.histogram()
+	                    .value(function (d) {
+	                        return d[prop];
+	                    })
+	                    .range(yExtent)
+	                    .bins(buckets);
 
+	                histData = hist(data);
 
-                binMax = d3.max(histData, function (d) {
-                    return d.y;
-                });
+	                binMax = d3.max(histData, function (d) {
+	                    return d.y;
+	                });
 
-                yScale = d3.scale.log()
-                    .domain([0.1, binMax])
-                    .range([h - barBaseSize, 0])
-                    .clamp(true);
+	                yScale = d3.scale.log()
+	                    .domain([0.1, binMax])
+	                    .range([h - barBaseSize, 0])
+	                    .clamp(true);
 
-                svg.attr('width', w);
-                svg.attr('height', h);
+	                svg.attr('width', w);
+	                svg.attr('height', h);
 
-                bucketWidth = Math.round(w / buckets);
-                svg.selectAll('rect')
-                    .data(histData)
+	                bucketWidth = Math.round(w / buckets);
+
+	                function configureBins(selection) {
+	                	selection
+		                    .attr('x', function (d, i) {
+		                        return Math.floor(bucketWidth * i);
+		                    })
+		                    .attr('y', function (d) {
+		                        return Math.floor(yScale(d.y));
+		                    })
+		                    .attr('width', Math.floor(bucketWidth - 2))
+		                    .attr('height', function (d) {
+		                        return Math.ceil(h - Math.floor(yScale(d.y))) + barBaseSize;
+		                    });
+	                }
+
+	                svg.selectAll('rect')
+	                    .data(histData)
+	                    .call(configureBins)
                     .enter().append('svg:rect')
-                    .attr('x', function (d, i) {
-                        return Math.floor(bucketWidth * i);
-                    })
-                    .attr('y', function (d) {
-                        return Math.floor(yScale(d.y));
-                    })
-                    .attr('width', Math.floor(bucketWidth - 2))
-                    .attr('height', function (d) {
-                        return Math.ceil(h - Math.floor(yScale(d.y))) + barBaseSize;
-                    });
+	                    .call(configureBins)
+	                    ;
+                });
 
                 scope.$watchCollection('player', function (newVal) {
                     var i;
