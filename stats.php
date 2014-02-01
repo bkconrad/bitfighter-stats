@@ -13,7 +13,7 @@ check_params(array(
 // cache archived stats forever
 $ttl = 0;
 
-if($month == date('m')) {
+if($month == date('n')) {
   // cache the current month's stats for ten minutes
   $ttl = 10 * 60;
 }
