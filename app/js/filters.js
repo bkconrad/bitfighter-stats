@@ -44,7 +44,7 @@ angular.module('bfstats.filters', [])
     })
     .filter('fromNow', function() {
         return function (input) {
-            return moment(input + ' +0300').fromNow();
+            return moment(input + ' GMT+0000').fromNow();
         };
     })
     .filter('monthYear', function () {

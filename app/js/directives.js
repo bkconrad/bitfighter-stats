@@ -384,8 +384,8 @@ angular.module('bfstats.directives', [])
 
             // The domain is the first week of 0AD
             var domain = [
-                moment([1, 0, '+0300'].join(' '), 'E H ZZ'),
-                moment([7, 23, '+0300'].join(' '), 'E H ZZ')
+                moment([1, 0, '+0000'].join(' '), 'E H ZZ'),
+                moment([7, 23, '+0000'].join(' '), 'E H ZZ')
             ];
 
             xScale = d3.time.scale()
@@ -428,7 +428,7 @@ angular.module('bfstats.directives', [])
                     .data(data)
                     .enter().append('svg:rect')
                     .attr('x', function (d) {
-                        var dataMoment = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ');
+                        var dataMoment = moment([d.day, d.hour, '+0000'].join(' '), 'E H ZZ');
                         return Math.floor(xScale(dataMoment.toDate()));
                     })
                     .attr('y', h)
@@ -440,7 +440,7 @@ angular.module('bfstats.directives', [])
                     .on('mouseover', function (d) {
                         var textBBox;
                         var detailRectPadding = 3;
-                        var text = moment([d.day, d.hour, '+0300'].join(' '), 'E H ZZ').format('ddd h A');
+                        var text = moment([d.day, d.hour, '+0000'].join(' '), 'E H ZZ').format('ddd h A');
                         var boxPos;
 
                         // create the detail box for this rect
