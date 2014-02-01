@@ -1,8 +1,9 @@
-<div class="row">
-	<div class="record col-xs-12 col-sm-6 col-md-4" ng-repeat="(recordName, record) in records">
-		<div class="record-name">{{recordName | statName}}</div>
-		<ol>
-		<li class="place" ng-repeat="place in record">
+<div class="row" ng-repeat="(group, properties) in propertyMap" id="{{group}}" >
+	<h4 class="col-xs-12">{{group | statName}}</h4>
+	<div class="record col-xs-6" ng-repeat="property in properties" ng-if="records[property.name]" >
+		<div class="record-name">{{property.name | statName}}</div>
+		<ol ng-if="records" >
+		<li class="place" ng-repeat="place in records[property.name]">
 			<span class="player_name">{{place.player_name}}&nbsp;</span>
 			<span class="period">{{place.period | monthYear}}</span>
 			<span class="value stat">{{place.value | stat}}</span>

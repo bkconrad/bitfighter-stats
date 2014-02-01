@@ -322,6 +322,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
 })
 
 .controller('RecordsCtrl', function ($scope, $http) {
+    $scope.propertyMap = PROPERTY_MAP;
     $http.get('records.php')
         .success(function (data) {
             $scope.records = data;
