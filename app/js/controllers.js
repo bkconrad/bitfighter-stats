@@ -135,8 +135,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 authed: $scope.selectedPlayer.is_authenticated === 1 ? 'yes' : 'no'
             };
 
-            console.log(params);
-
             if ($scope.playerStatsLoading) {
                 return;
             }
@@ -177,8 +175,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
                     }
 
                     $scope.player = data;
-
-                    console.log(data);
                 })
                 .error(ERROR_HANDLER)['finally'](function () {
                     $scope.playerStatsLoading = false;
@@ -318,7 +314,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
     $http.get('players_per_game.php')
         .success(function (data) {
             $scope.games = data;
-            console.log(data);
         })
         .error(ERROR_HANDLER);
 })
