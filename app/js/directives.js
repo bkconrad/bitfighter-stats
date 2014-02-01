@@ -203,8 +203,24 @@ angular.module('bfstats.directives', [])
                     .attr('class', 'detail')
                     .attr('x', padding)
                     .attr('y', padding)
-                    .attr('stroke', COLOR.text)
+                    .attr('fill', COLOR.text)
                     .style('vertical-align', 'middle');
+
+                // Add a title header
+                headerText = d3.select(svg)
+                	.append('svg:text')
+                	.text(options['header'])
+                	.attr('class', 'header')
+                	.attr('fill', COLOR.text)
+                	.attr('font-weight', 'bold')
+                	;
+
+                headerBBox = headerText.node().getBBox();
+                headerText
+                	.attr('text-anchor', 'middle')
+                	.attr('x', (w - padding)/2 + padding)
+                	.attr('y', headerBBox.height)
+                	;
             });
         }
     };
