@@ -9,7 +9,7 @@
 	No stats found for {{selectedPlayer.player_name}} during {{selectedPeriod.pretty}}
 </div>
 <div ng-if="player.found">
-	<h1 class="auth"> {{player.player_name}} </h1>
+	<h1 class="{{player.is_authenticated ? 'authed' : ''}}"> {{player.player_name}} </h1>
 
 	<div id="badges">
 		&nbsp;
