@@ -111,7 +111,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
                         row = data[i];
                         row.game_count = row.win_count + row.lose_count + row.tie_count;
                         row.finished_game_count = row.win_count + row.lose_count + row.tie_count;
-                        row.last_played = moment(row.last_played + " GMT+0100").fromNow();
                         row.flag_scores_per_game = row.flag_scores / row.game_count;
                         row.spread = row.kill_count - row.death_count;
                         row.spread_per_game = (row.kill_count - row.death_count) / row.game_count;
@@ -158,7 +157,6 @@ angular.module('bfstats.controllers', ['ngGrid'])
                     // Clean up the data once we receive it
                     data.game_count = data.win_count + data.lose_count + data.tie_count + data.dnf_count;
                     data.finished_game_count = data.win_count + data.lose_count + data.tie_count;
-                    data.last_played = moment(data.last_played + " GMT+0100").fromNow();
                     data.flag_scores_per_game = data.flag_scores / data.game_count;
                     data.spread = data.kill_count - data.death_count;
                     data.spread_per_game = (data.kill_count - data.death_count) / data.game_count;
@@ -225,7 +223,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 displayName: 'Wins'
             }, {
                 field: 'lose_count',
-                visible: true,
+                visible: false,
                 displayName: 'Losses'
             }, {
                 field: 'tie_count',
@@ -265,7 +263,9 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 displayName: 'Team Switches'
             }, {
                 field: 'last_played',
-                visible: false,
+                visible: true,
+                cellTemplate: '<span>{{row.entity[col.field] | fromNow }}</span>',
+                cellClass: 'ngCellText',
                 displayName: 'Last Played'
             }],
             data: 'stats'
