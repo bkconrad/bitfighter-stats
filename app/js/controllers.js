@@ -187,7 +187,7 @@ angular.module('bfstats.controllers', ['ngGrid'])
                 field: 'player_name',
                 visible: true,
                 displayName: 'Player Name',
-                width: '100'
+                width: '150'
             }, {
                 field: 'kill_death_ratio',
                 visible: true,
