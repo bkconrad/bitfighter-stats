@@ -8,7 +8,8 @@
         "js-beautify":"",
         "jshint":"",
         "jslint":"",
-        "uglify-js":""
+        "uglify-js":"",
+        "uglifycss":""
     },
     "license":"MIT"
 }

@@ -1,10 +1,12 @@
 task('build', function () {
-    var compressedResult;
-    var combinedResult;
+    var compressedJsResult;
+    var combinedJsResult;
     var fs = require('fs');
     var path = require('path');
     var UglifyJS = require('uglify-js');
-    var combineFiles = [
+    var UglifyCSS = require('uglifycss');
+
+    var jsFilesToCombine = [
           './lib/moment.min.js'
         , './lib/ng-grid/lib/jquery-1.9.1.js'
         , './lib/angular.min.js'
@@ -18,11 +20,20 @@ task('build', function () {
         , './lib/es5-shim.min.js'
     ];
 
-    var compressFiles = [
+    var jsFilesToCompress = [
           './app/js/app.js'
         , './app/js/controllers.js'
         , './app/js/filters.js'
         , './app/js/directives.js'
+    ];
+
+    var cssFilesToCompress = [
+        'lib/ng-grid/ng-grid.min.css'
+      , 'lib/loading-bar.min.css'
+      , 'lib/ng-grid/lib/bootstrap/css/bootstrap.min.css'
+      , 'lib/ng-grid/lib/bootstrap/css/bootstrap-responsive.min.css'
+      , 'lib/bootstrap/css/bootstrap.min.css'
+      , 'app/css/style.css'
     ];
 
     if(!fs.existsSync('build')) {
@@ -32,18 +43,29 @@ task('build', function () {
     // write the browserified and minified source
     filename = path.join('build', 'bfstats.min.js');
 
-    console.log('Combining...');
-    combinedResult = UglifyJS.minify(combineFiles, {
+    console.log('Combining JS...');
+    combinedJsResult = UglifyJS.minify(jsFilesToCombine, {
         compress: false
     });
 
-    console.log('Compressing...');
-    compressedResult = UglifyJS.minify(compressFiles);
+    console.log('Compressing JS...');
+    compressedJsResult = UglifyJS.minify(jsFilesToCompress);
 
     console.log('Writing...')
-    fs.writeFileSync(filename, combinedResult.code + compressedResult.code);
+    fs.writeFileSync(filename, combinedJsResult.code + compressedJsResult.code);
 
-    console.log('Wrote to ' + filename + '. Size: ' + (combinedResult.code.length + compressedResult.code.length));
+    console.log('Wrote to ' + filename + '. Size: ' + (compressedJsResult.code.length + combinedJsResult.code.length));
+
+    // write the browserified and minified source
+    filename = path.join('build', 'bfstats.min.css');
+
+    console.log('Compressing CSS...');
+    compressedCssResult = UglifyCSS.processFiles(cssFilesToCompress);
+
+    console.log('Writing...')
+    fs.writeFileSync(filename, compressedCssResult);
+
+    console.log('Wrote to ' + filename + '. Size: ' + compressedCssResult.length);
 });
 
 task('lint', function () {
